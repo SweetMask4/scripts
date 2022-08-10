@@ -1,0 +1,8 @@
+#!/bin/bash
+
+perfil=$(pacmd list-cards | grep 'active profile' | awk '{printf $NF}' | sed 's/</ /' | sed 's/>/ /')
+if [ "$perfil" == "output:hdmi-surround71" ]; then
+pacmd set-card-profile alsa_card.pci-0000_00_1b.0 output:analog-stereo+input:analog-stereo
+else
+    echo failed && exit 1
+fi

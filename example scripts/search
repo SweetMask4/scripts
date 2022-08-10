@@ -1,0 +1,7 @@
+#!/bin/bash
+
+search_anime () {
+	search=$(printf '%s' "$1" | tr ' ' '-' )
+	curl -s "https://monoschinos2.com/buscar?q=$search" -L | grep "^<h3" | sed 's/<h3 class="seristitles">//g' | sd "</h3>" ""
+}
+
