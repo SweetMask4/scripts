@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+source "$HOME/scripts/dmenu/config/config"
+
+
+# ensure that no packages are being installed
+# check for pacman and paru, yay
+[ -f /var/lib/pacman/db.lck ] && notify-send --urgency=critical "❕[ERROR] /var/lib/pacman/db.lck exists pacman in use" && exit 1
+
+_out="echo"
+if [[ ${TERM} == 'dumb' ]]; then
+    _out="notify-send"
+fi
+
+output(){
+    ${_out} "power-menu" "$@"
+}
+
+main() {
+    # An array of options to choose.
+    declare -a options=(
+    "Lock screen"
+    "Logout"
+    "Reboot"
+    "Shutdown"
+    "Suspend"
+    "Quit"
+    )
+
+    choice=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Shutdown menu:' "${@}")
+    # What to do when/if we choose one of the options.
+    case $choice in
+        'Logout')
+            killall Xorg           
+            ;;
+        'Lock screen')
+            # shellcheck disable=SC2154
+            ${logout_locker}
+            ;;
+        'Reboot')
+            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                systemctl reboot
+            else
+                output "User chose not to reboot." && exit 0
+            fi
+            ;;
+        'Shutdown')
+            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                systemctl poweroff
+            else
+                output "User chose not to shutdown." && exit 0
+            fi
+            ;;
+        'Suspend')
+            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                systemctl suspend
+            else
+                output "User chose not to suspend." && exit 0
+            fi
+            ;;
+        'Quit')
+            output "Program terminated." && exit 0
+        ;;
+        # It is a common practice to use the wildcard asterisk symbol (*) as a final
+        # pattern to define the default case. This pattern will always match.
+        *)
+            exit 0
+        ;;
+    esac
+
+}
+
+[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"

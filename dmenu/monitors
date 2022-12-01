@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# dmenu menu to:
+# - enable second display as mirrored
+# - enable second display as second monitor
+# - disable default display
+# - disable second display
+
+# if your outputs names are different you need to change
+set -euo pipefail
+source "$HOME/scripts/dmenu/config/config"
+
+# Get all possible displays
+ALLPOSS=$(xrandr -q | grep "connected")
+
+# Get all connected screens.
+SCREENS=$(echo "$ALLPOSS" | grep " connected" | awk '{print $1}')
+
+CARDS="alsa_card.pci-0000_00_1b.0"
+DEFAULT_AUDIO="output:analog-stereo+input:analog-stereo"
+HDMI="output:hdmi-stereo"
+
+DEFAULT="LVDS1"
+SECOND="HDMI1"
+HIGH="1920x1080"
+
+CHOICE="$(printf  'Second as monitor\nSecond as mirror\nSecond disabled\nDefault disabled'| $DMENU 'Display option: ')"
+
+if [ "$CHOICE" == "Second as monitor" ]; then
+	SIDE="$(printf 'left\nright\nabove\nbelow' | $DMENU 'HDMI monitor side: ')"
+
+	# defaults to right
+	if [ "$SIDE" == "left" ]; then
+		xrandr --output $DEFAULT --auto --output $SECOND --left-of $DEFAULT
+
+	elif [ "$SIDE" == "above" ]; then
+		xrandr --output $DEFAULT --auto --output $SECOND --above $DEFAULT
+
+	elif
+		[ "$SIDE" == "below" ]
+	then
+		xrandr --output $DEFAULT --auto --output $SECOND --below $DEFAULT
+
+	else
+		xrandr --output $DEFAULT --auto --output $SECOND --right-of $DEFAULT
+	fi
+
+elif [ "$CHOICE" == "Second as mirror" ]; then
+	xrandr --output $DEFAULT --auto --output $SECOND --same-as $DEFAULT
+ 
+elif [ "$CHOICE" == "Second disabled" ]; then
+  pacmd set-card-profile "$CARDS" "$DEFAULT_AUDIO"  
+  xrandr --output $SECOND --off --output $DEFAULT --auto
+  
+
+elif [ "$CHOICE" == "Default disabled" ]; then
+	 pacmd set-card-profile "$CARDS" "$HDMI"
+   # xrandr --output $DEFAULT --off --output $SECOND --mode $HIGH --pos 0x0 --rotate normal	
+   xrandr --output $DEFAULT --off --output $SECOND --auto --pos 0x0 --rotate normal	 
+   WALLPAPERS 
+fi
+
+WALLPAPERS(){
+  xargs xwallpaper --stretch ~/.config/wall
+}

@@ -1,0 +1,27 @@
+#!/bin/env bash
+
+set -euo pipefail
+
+source "$HOME/scripts/dmenu/config/config"
+options=(
+  "New script"
+  "quit"
+)
+  choice=$(printf '%s\n' "${options[@]}" | $DMENU 'Mkscripts:') 
+  if [ "$choice" == "New script" ]; then
+  script_new=$(echo "" | $DMENU 'Enter new script:' "$@")
+  name="$script_new"
+  file=$HOME/scripts/scripts_new/$name
+if [ -d "$HOME/scripts/scripts_new" ]; then
+  if [ -e "$HOME/scripts/scripts_new/$name" ]; then
+    $DMEDITOR "$file"
+  else
+    echo "#!/bin/env bash" >> "$file"
+    chmod +x "$file"
+    $DMEDITOR "$file"
+  fi
+fi
+
+else
+ echo "Program terminated." && exit 0
+fi
