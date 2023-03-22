@@ -4,10 +4,11 @@
 set -euo pipefail
 
 # Check if the configuration file exists, and if it does, source it
-if [ -f "$HOME/scripts/dmenu/config/config" ]; then
-  . "$HOME/scripts/dmenu/config/config"
+if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
+  . "$HOME/scripts/config/_launch-helper.sh"
 else
-  echo "configuration file not found" && exit 1
+  echo "configuration file not found"
+  exit 1
 fi
 
 main() {
