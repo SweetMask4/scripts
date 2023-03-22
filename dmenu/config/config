@@ -1,62 +1,17 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
-# This issue is ignored because it is part of a larger file that calls upon all variables listed
-
-# To edit this file copy it to `${HOME}/.config/dmscripts/config`
-# `cp /etc/dmscripts/config ${HOME}/.config/dmscripts/config`
-
-# Defined variables, modify anything in quotes to your prefered software
-
-# -p is needed as we use prompts, alternative programs have to handle prompts well.
-
-DMENU="dmenu -i -l 20 -p"
-
-# DMBROWSER="brave"
+# Defined variables, modify anything in quotes to your preferred software
+DMENU="dmenu -i -l 20 -x 9 -y 9 -p"
+# DMENU="rofi -dmenu -i -p"
 DMBROWSER="firefox"
-
-# DMTERM="st -e"
-DMTERM="alacritty -e"
-
+DMTERM="st -e"
 DMEDITOR="emacsclient -c -a emacs"
-# DMEDITOR="${DMTERM} nvim"
-
-PDF_VIEWER=zathura
-
-# TODO: Rename this variable to something more traditional
-logout_locker='slock'
-# logout_locker='dm-tool lock'
-
-# This case statement lets you change what the DMENU variable is for different scripts, so if you
-# want a unique variable for each script you can
-# syntax is as follows:
-# "<ending-of-script>") DMENU="your variable here"
-# *) should be left blank, global variables are defined above
-
-# include -p in standard dmenu as we use prompts by default
-case "${0##*-}" in
-#  "colpick") DMENU="dmenu -i -p";;
-#  "confedit") DMENU="dmenu -i -l 30 -p";;
-#  "youtube") DMBROWSER="firefox";;
-  *);;
-esac
-
-# "${0##*-}" means grab the 0th argument (which is always the path to the program) starting from the
-# last dash. This gives us the word after the - which is what we are searching for in the case
-# statement. ie dm-man -> man
-
-# An awk equivalent is: 
-# awk -F"-" '{print $NF}'
-# Sadly cut has no easy equivalent
-
-# TODO: Move almost all of these variables into the case statement
-# TODO: Make some of the more useful ones general variables
-# IE a pictures directory, an audio directory, config locations, etc
+PDF_VIEWER="zathura"
+LOGOUT_LOCKER="slock"
 
 # dm-setbg
 setbg_dir="${HOME}/Pictures/wallpapers"
-# Set this to 1 if you want to use imv and wayland, 0 if you want to use sxiv
-# Note that sxiv is X11 only, you need to mark the image you want to use.
-use_imv=0 
+use_imv=0
 
 # dm-maim
 maim_dir="${HOME}/Pictures/Screenshots"
@@ -77,23 +32,29 @@ confedit_list[doom emacs packages.el]="$HOME/.config/doom/packages.el"
 confedit_list[dunst]="$HOME/.config/dunst/dunstrc.org"
 confedit_list[bat]="$HOME/.config/bat/config"
 confedit_list[fish]="$HOME/.config/fish/config.org"
-confedit_list[picom]="$HOME/.config/picom/picom.org"
+confedit_list[picom]="$HOME/.config/picom/picom.conf"
 confedit_list[ssh]="$HOME/.ssh/config"
 confedit_list[xmobar]="$HOME/.config/xmobar/xmobarrc"
 confedit_list[xmonad]="$HOME/.config/xmonad/xmonad.org"
 confedit_list[xinitrc]="$HOME/.config/X11/xinitrc"
 confedit_list[xresources]="$HOME/.config/X11/xresources"
-confedit_list[nano]="$HOME/.config/nano/nanorc.org"
+confedit_list[nano]="$HOME/.config/nano/nanorc"
 confedit_list[tmux]="$HOME/.config/tmux/tmux.org"
 confedit_list[zathura]="$HOME/.config/zathura/zathurarc"
-confedit_list[zsh]="$HOME/.config/zsh/zshrc.org"
+confedit_list[starship]="$HOME/.config/starship/starship.toml"
+confedit_list[zsh]="$HOME/.config/zsh/.zshrc"
 confedit_list[lf]="$HOME/.config/lf/lfrc"
+confedit_list[zshenv]="$HOME/.zshenv"
+confedit_list[zsh]="$HOME/.config/zsh/.zshrc"
+confedit_list[aliases]="$HOME/.config/shell/aliases"
+confedit_list[function]="$HOME/.config/shell/function"
+confedit_list[zprofiel]="$HOME/.config/zsh/.zprofile"
+confedit_list[lf]="$HOME/.config/lf/lfrc"
+confedit_list[lf mappings]="$HOME/.config/lf/mappings"
+confedit_list[lf settings]="$HOME/.config/lf/settings"
+confedit_list[lf commands]="$HOME/.config/lf/commands"
 
-
-# dm-radio config
-# Your list of online radio stations for the dm-radio script.
-# Syntax: radio_stations[name]="https://www.zeno.fm/radio/your-station"
-
+# dm-confedit
 declare -A radio_stations
 radio_stations[50s Rewind]="https://zeno.fm/radio/50s-rewind/"
 radio_stations[60s Rewind]="https://zeno.fm/radio/60s-rewind/"
@@ -111,42 +72,10 @@ radio_stations[PopMusic]="https://zeno.fm/radio/popmusic74vyurvmug0uv/"
 radio_stations[PopStars]="https://zeno.fm/radio/popstars/"
 radio_stations[RadioMetal]="https://zeno.fm/radio/radio-metal/"
 radio_stations[RocknRoll Radio]="https://zeno.fm/radio/rocknroll-radio994c7517qs8uv/"
+radio_stations[rb-hip-hop-163]="https://www.radio.es/genre/rap"
 
-# dm-colpick config
-declare -A colpick_list
-colpick_list[black]="#282a36"
-colpick_list[red]="#ff5555"
-colpick_list[green]="#5af78e"
-colpick_list[yellow]="#f1fa8c"
-colpick_list[blue]="#57c7ff"
-colpick_list[magenta]="#ff6ac1"
-colpick_list[cyan]="#8be9fd"
-colpick_list[white]="#f1f1f0"
-colpick_list[orange]="#ffb86c"
-colpick_list[purple]="#bd9cf9"
-
-# dm-translate config
-
-# dm-translate currently supports two translation services, LibreTranslate and Lingva Translate.
-# LibreTranslate uses the free software (Expat/MIT licensed) Argos Translate library for translation.
-# Lingva Translate uses the Google Translate (dis)service for translation, but this is fully server-side and Google will not see your IP.
-# Both are free software services that can be self-hosted.
-# If you want more languages (or need a specific language not in the Argos library) you should chose Lingva Translate.
-# If you want to get away from Google and/or want a fully free software implementation you should use LibreTranslate.
-# The choice is yours...
-translate_service="libre"
-translate_service="lingva"
-libretranslate_instance="https://libretranslate.de"
-lingva_instance="https://lingva.ml"
-
-# Uncomment to manually set the languages dm-translate will show
-# LibreTranslate languages:
-#   - `curl -Ss "https://libretranslate.de/languages" | jq`
-# Lingva Translate languages:
-#   - `curl -Ss "https://lingva.ml/api/v1/languages/source" | jq`
-# translate_list="manual"
-# declare -A lang_map
-# lang_map[Spanish]=es
-# lang_map[English]=en
-# lang_map[Automatic]=auto
-
+# This case statement lets you change what the DMENU variable is for different scripts
+# Add more cases if necessary
+# case "${0##*-}" in
+    # "confedit") DMENU="dmenu -i -l 30 -p";;
+# esac

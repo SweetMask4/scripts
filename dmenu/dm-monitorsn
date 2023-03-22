@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# dmenu menu to:
+# - enable second display as mirrored
+# - enable second display as second monitor
+# - disable default display
+# - disable second display
+
+set -euo pipefail
+
+# Load configuration
+source "$HOME/scripts/dmenu/config/config"
+
+# Reload wallpaper
+_reload_wallpaper() {
+    xargs xwallpaper --stretch < "$HOME/.config/wall"
+}
+
+# Select display options
+_second_as_monitor() {
+    local SIDE
+    read -r -a options <<< "left right above below"
+    SIDE=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Display option: ')
+    case $SIDE in 
+        left) xrandr --output "$DEFAULT" --auto --output "$SECOND" --left-of "$DEFAULT" ;;
+        right) xrandr --output "$DEFAULT" --auto --output "$SECOND" --right-of "$DEFAULT" ;;
+        above) xrandr --output "$DEFAULT" --auto --output "$SECOND" --above "$DEFAULT" ;;
+        below) xrandr --output "$DEFAULT" --auto --output "$SECOND" --below "$DEFAULT" ;;
+        *) exit 0 ;;
+    esac
+}
+
+# Switch audio output
+switch_audio_output() {
+    local DEVICES=$(pacmd list-cards | awk '/name:/ {print $2}' | sed -e 's/[<>]//g')
+    local PROFILES=$(pacmd list-cards | grep -A 9 'profiles' | grep -v 'profiles' | awk -F ':' '{print $1":"$2":"$3}' | awk '{print $1}')
+    if [[ "$(echo -e "No\nYes" | ${DMENU} "Do you want to change the audio profile?")" == "Yes" ]]; then
+        local Selected_Profile=$(printf '%s\n' "${PROFILES[@]}" | ${DMENU} 'Available profiles:')
+        pacmd set-card-profile "$DEVICES" "$Selected_Profile"
+    fi
+}
+
+# Main function
+main() {
+    # Get the current connected monitors
+    local connected_monitors=$(xrandr | grep " connected" | awk '{print $1 }'| tr '\n' ' ')
+    local number_of_monitors=$(echo "$connected_monitors" | wc -w)
+    if [ "$number_of_monitors" -eq 2 ]
+    then
+        read -r -a options <<< "Second as monitor\nSecond as mirror\nSecond disabled\nDefault disabled"
+        local DEFAULT=$(echo "$connected_monitors" | awk '{print $1}')
+        local SECOND=$(echo "$connected_monitors" | awk '{print $2}')
+        local choice=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Display option: ')
+        case $choice in 
+            'Second as monitor') _second_as_monitor ;;
+            'Second as mirror') xrandr --output "$DEFAULT" --auto --output "$SECOND" --same-as "$DEFAULT" && _reload_wallpaper ;;
+            'Second disabled') xrandr --output "$SECOND" --off --output "$DEFAULT" --auto ;;
+            'Default disabled') switch_audio_output && xrandr --output "$DEFAULT" --off --output "$SECOND" --auto --pos 0x0 --rotate normal && _reload_wallpaper ;;
+            *) exit 0 ;;
+        esac
+    else
+        echo "Error: Please connect two monitors."
+    fi
+}
+
+# Call main function
+main "$@"
+

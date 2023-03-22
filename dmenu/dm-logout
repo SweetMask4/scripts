@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
+# Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
-source "$HOME/scripts/dmenu/config/config"
 
-
-# ensure that no packages are being installed
-# check for pacman and paru, yay
-[ -f /var/lib/pacman/db.lck ] && notify-send --urgency=critical "❕[ERROR] /var/lib/pacman/db.lck exists pacman in use" && exit 1
+# Check if the configuration file exists, and if it does, source it
+if [ -f "$HOME/scripts/dmenu/config/config" ]; then
+  . "$HOME/scripts/dmenu/config/config"
+else
+  echo "configuration file not found" && exit 1
+fi
 
 _out="echo"
 if [[ ${TERM} == 'dumb' ]]; then
@@ -15,6 +17,25 @@ fi
 
 output(){
     ${_out} "power-menu" "$@"
+}
+
+warning(){
+  if [ -f /var/lib/pacman/db.lock ]; then
+    ${_out} "pacman is running wait for it to finish"
+  fi
+
+  if pgrep -x "pacman" > /dev/null; then
+    ${_out} "System is updating. Cannot shut down, reboot or log out right now." 
+    exit 1
+  fi
+}
+
+desktop(){
+  case "$XDG_SESSION_TYPE" in
+    'x11') grep "Name=" /usr/share/xsessions/*.desktop | cut -d'=' -f2;;
+    'wayland') grep "Name=" /usr/share/wayland-sessions/*.desktop | cut -d'=' -f2 || grep "Name=" /usr/share/xsessions/*.desktop | grep -i "wayland" | cut -d'=' -f2 | cut -d' ' -f1;; 
+    *) err "Unknown display server";;
+  esac
 }
 
 main() {
@@ -26,20 +47,33 @@ main() {
     "Shutdown"
     "Suspend"
     "Quit"
-    )
+    ) 
+    declare -a MANAGERS
+    while IFS= read -r manager
+    do
+        MANAGERS+=("${manager,,}")
+    done < <(desktop)
 
     choice=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Shutdown menu:' "${@}")
     # What to do when/if we choose one of the options.
     case $choice in
         'Logout')
-            killall Xorg           
+                if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                warning
+                for manager in "${MANAGERS[@]}"; do 
+                killall "${manager}" || output "Process ${manager} was not running."
+                done
+            else
+                output "User chose not to logout." && exit 1
+            fi
             ;;
         'Lock screen')
-            # shellcheck disable=SC2154
-            ${logout_locker}
+          warning
+          ${logout_locker}
             ;;
         'Reboot')
             if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                warning
                 systemctl reboot
             else
                 output "User chose not to reboot." && exit 0
@@ -47,6 +81,7 @@ main() {
             ;;
         'Shutdown')
             if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                warning
                 systemctl poweroff
             else
                 output "User chose not to shutdown." && exit 0
@@ -54,6 +89,7 @@ main() {
             ;;
         'Suspend')
             if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                warning
                 systemctl suspend
             else
                 output "User chose not to suspend." && exit 0
@@ -70,5 +106,4 @@ main() {
     esac
 
 }
-
 [[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"

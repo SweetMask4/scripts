@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
-set -euo pipefail
-source "$HOME/scripts/dmenu/config/config"
 
+# Exit if any command fails, if any undefined variable is used, or if a pipeline fails
+set -euo pipefail
+
+# Check if the configuration file exists, and if it does, source it
+if [ -f "$HOME/scripts/dmenu/config/config" ]; then
+  . "$HOME/scripts/dmenu/config/config"
+else
+  echo "configuration file not found" && exit 1
+fi
 
 menu() {
   printf '%s\n' "Quit"

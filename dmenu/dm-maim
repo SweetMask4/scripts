@@ -1,14 +1,25 @@
 #!/usr/bin/env bash
 
-# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
-# if certain things happen, which is a good thing.  Otherwise, we can
-# get hidden bugs that are hard to discover.
+# Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
-source "$HOME/scripts/dmenu/config/config"
+
+# Check if the configuration file exists, and if it does, source it
+if [ -f "$HOME/scripts/dmenu/config/config" ]; then
+  . "$HOME/scripts/dmenu/config/config"
+else
+  echo "configuration file not found" && exit 1
+fi
+
+sound(){
+if [ -f /usr/share/sounds/freedesktop/stereo/camera-shutter.oga ];then
+paplay /usr/share/sounds/freedesktop/stereo/camera-shutter.oga
+fi
+}
 
 cp2cb() {
   case "$XDG_SESSION_TYPE" in
-    'x11') xclip -r -selection clipboard;; 
+    'x11') xclip -r -selection clipboard;;
+    'wayland') wl-copy -n;;  
     *) err "Unknown display server";; 
   esac
 }
@@ -106,16 +117,19 @@ main() {
       # shellcheck disable=SC2086,SC2154
       maim ${_maim_args} "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
       notify-send "Saved Screenshot" "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
+      sound
     ;;
     'Clipboard')
       # shellcheck disable=SC2086
       maim ${_maim_args} | cp2cb-maim
       notify-send "Saved Screenshot" "Clipboard"
+      sound
     ;;
     'Both')
       # shellcheck disable=SC2086
       maim ${_maim_args} | tee "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png" | cp2cb-maim
       notify-send "Saved Screenshot" "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png And Clipboard"
+      sound 
     ;;
     *)
       exit 1
@@ -125,4 +139,3 @@ main() {
 }
 
 [[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
-

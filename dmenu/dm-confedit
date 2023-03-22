@@ -1,19 +1,14 @@
 #!/usr/bin/env bash
-#
-# Script name: dm-confedit
-# Description: Choose from a list of configuration files to edit.
-# Dependencies: dmenu, emacsclient
-# GitLab: https://www.gitlab.com/dwt1/dmscripts
-# License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
-# Contributors: Derek Taylor
-#               Simon Ingelsson
-#               HostGrady
 
-# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
-# if certain things happen, which is a good thing.  Otherwise, we can
-# get hidden bugs that are hard to discover.
+# Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
-source "$HOME/scripts/dmenu/config/config"
+
+# Check if the configuration file exists, and if it does, source it
+if [ -f "$HOME/scripts/dmenu/config/config" ]; then
+  . "$HOME/scripts/dmenu/config/config"
+else
+  echo "configuration file not found" && exit 1
+fi
 
 main() {
   # Clean options array making sure that the files exist
