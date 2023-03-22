@@ -14,3 +14,17 @@ this is a suite of scripts that work with both dmenu and rofi and have the follo
 - launch-kill facilitates the closing of malfunctioning programmes 
 - launch-man makes it easy to look up a command in man
 - launch-radio makes it easier for you to listen to the radio 
+
+# installation
+
+``` shell
+git clone https://github.com/SweetMask4/scripts.git 
+```
+
+add this to your .zshrc or .bashrc file so the script can be called from anywhere on your system
+``` shell
+if [ -d "$HOME/scripts" ] ;
+  then PATH="$HOME/scripts:$PATH"
+fi
+```
+is configured in ~/scripts/config/config
