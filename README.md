@@ -15,6 +15,9 @@ this is a suite of scripts that work with both dmenu and rofi and have the follo
 - launch-man makes it easy to look up a command in man
 - launch-radio makes it easier for you to listen to the radio 
 
+![launch-logout](https://github.com/SweetMask4/scripts/blob/main/screenshots/launch-logout-dmenu.png?raw=true)
+![launch-note](https://github.com/SweetMask4/scripts/blob/main/screenshots/launch-note-rofi.png?raw=true)
+
 # installation
 
 ``` shell
