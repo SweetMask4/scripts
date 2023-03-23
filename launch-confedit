@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Check if the configuration file exists, and if it does, source it
 if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/config/_launch-helper.sh"
+  . "$HOME/scripts/_launch-helper.sh"
 else
   echo "configuration file not found"
   exit 1
@@ -22,13 +22,13 @@ main() {
 
   # Piping the above array (cleaned) into dmenu.
   # We use "printf '%s\n'" to format the array one item to a line.
-  choice=$(printf '%s\n' "${!_clean_list[@]}" | sort | ${DMENU} 'Edit config:' "$@")
+  choice=$(printf '%s\n' "${!_clean_list[@]}" | sort | ${LAUNCHER} 'Edit config:' "$@")
 
   # What to do when/if we choose a file to edit.
   if [ "$choice" ]; then
     cfg=$(printf '%s\n' "${_clean_list["${choice}"]}")
     # shellcheck disable=SC2154
-    $DMEDITOR "$cfg"
+    $LEDITOR "$cfg"
   # What to do if we just escape without choosing anything.
   else
       echo "Program terminated." && exit 0

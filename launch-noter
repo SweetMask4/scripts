@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Check if the configuration file exists, and if it does, source it
 if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/config/_launch-helper.sh"
+  . "$HOME/scripts/_launch-helper.sh"
 else
   echo "configuration file not found"
   exit 1
@@ -20,7 +20,7 @@ article_library="$HOME/Documents/Articles"
 # <<------ Main ------>> #
 create_document() {
   # Use dmenu to prompt the user to select the type of document to create
-  document_type=$(printf "Basic\nOrg\nLaTeX\nBeamer\nRmark" | ${DMENU} "What kind of note?")
+  document_type=$(printf "Basic\nOrg\nLaTeX\nBeamer\nRmark" | ${LAUNCHER} "What kind of note?")
 
   # Check if the user cancelled the prompt
   if [ -z "$document_type" ]; then
@@ -60,7 +60,7 @@ create_document() {
   esac
 
   # Use dmenu to prompt the user to enter a name for the note
-  cn_name=$(echo "" | ${DMENU} "Enter a name for the note:")
+  cn_name=$(echo "" | ${LAUNCHER} "Enter a name for the note:")
 
   # Check if the user cancelled the prompt
   if [ -z "$cn_name" ]; then
@@ -70,20 +70,20 @@ create_document() {
   # Check if the file already exists
   if [ -f "$directory/$cn_name.$EXTENSION" ]; then
     # Prompt the user to confirm if they want to overwrite the file
-    if ! (echo -e "Yes\nNo" | ${DMENU} "Note already exists. Overwrite?" | grep -q "Yes"); then
+    if ! (echo -e "Yes\nNo" | ${LAUNCHER} "Note already exists. Overwrite?" | grep -q "Yes"); then
       return
     fi
   fi
 
   notify-send "$message"
   cp "$directory/Templates/$template" "$directory/$cn_name.$EXTENSION"
-  $DMEDITOR "$directory/$cn_name.$EXTENSION"
+  $LEDITOR "$directory/$cn_name.$EXTENSION"
 }
 
 open_document() {
   # case insensitive search with ripgrep
   document=$(rg --files --iglob "*.pdf" --iglob "*.epub" --iglob "*.mobi" "$directory")
-  selected_document=$(echo "$document" | ${DMENU} "📖 Open:")
+  selected_document=$(echo "$document" | ${LAUNCHER} "📖 Open:")
   if [[ -n $selected_document ]]; then
     $PDF_VIEWER "$selected_document"
   fi
@@ -91,15 +91,15 @@ open_document() {
 
 edit_notes() {
   document=$(rg --files --iglob "*.md" --iglob "*.org" --iglob "*.wiki" --iglob "*.tex" "$directory")
-  selected_document=$(echo "$document" | ${DMENU} "📖 Open:")
+  selected_document=$(echo "$document" | ${LAUNCHER} "📖 Open:")
   if [[ -n $selected_document ]]; then
-    $DMEDITOR "$selected_document"
+    $LEDITOR "$selected_document"
   fi
 }
 
 main() {
   # Prompt the user to select "Library" or "Articles" using dmenu
-  selected_dir=$(echo -e "📑 Create Note\n🔖 View Notes\n📚 Library\n📜 Articles" | ${DMENU} "📂 Choose an action:")
+  selected_dir=$(echo -e "📑 Create Note\n🔖 View Notes\n📚 Library\n📜 Articles" | ${LAUNCHER} "📂 Choose an action:")
   # Set the directory based on the user's selection
   # if selected_dir is not empty
   if [[ -n $selected_dir ]]; then

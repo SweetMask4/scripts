@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 # Defined variables, modify anything in quotes to your preferred software
-DMENU="dmenu -i -l 20 -x 9 -y 9 -p"
-# DMENU="rofi -dmenu -i -p"
-DMBROWSER="firefox"
-DMTERM="st -e"
-DMEDITOR="emacsclient -c -a emacs"
+LAUNCHER="dmenu -i -l 20 -x 9 -y 9 -p"
+LBROWSER="firefox"
+LTERM="st -e"
+LEDITOR="emacsclient -c -a emacs"
 PDF_VIEWER="zathura"
 LOGOUT_LOCKER="slock"
 
@@ -73,9 +72,3 @@ radio_stations[PopStars]="https://zeno.fm/radio/popstars/"
 radio_stations[RadioMetal]="https://zeno.fm/radio/radio-metal/"
 radio_stations[RocknRoll Radio]="https://zeno.fm/radio/rocknroll-radio994c7517qs8uv/"
 radio_stations[rb-hip-hop-163]="https://www.radio.es/genre/rap"
-
-# This case statement lets you change what the DMENU variable is for different scripts
-# Add more cases if necessary
-# case "${0##*-}" in
-    # "confedit") DMENU="dmenu -i -l 30 -p";;
-# esac

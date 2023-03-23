@@ -6,7 +6,7 @@ set -euo pipefail
 
 # Check if the configuration file exists, and if it does, source it
 if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/config/_launch-helper.sh"
+  . "$HOME/scripts/_launch-helper.sh"
 else
   echo "configuration file not found"
   exit 1
@@ -27,7 +27,7 @@ setbg() {
 
 
 main() {
-  case "$(printf "Set\nRandom\nExit" | ${DMENU} "What would you like to do?")" in
+  case "$(printf "Set\nRandom\nExit" | ${LAUNCHER} "What would you like to do?")" in
     Set)
       if ((use_imv)); then
         imv "${setbg_dir}" | while read -r LINE; do
@@ -49,7 +49,7 @@ main() {
         wallpaper="$(find "${setbg_dir}" -type f | shuf -n 1)"
         setbg "$wallpaper" &
         echo "$wallpaper" > "$HOME/.config/wall"
-        valid_paper="$(printf "Yes\nNo" | ${DMENU} "Do you like the new wallpaper?")"
+        valid_paper="$(printf "Yes\nNo" | ${LAUNCHER} "Do you like the new wallpaper?")"
       done ;;
     Exit) echo "Program terminated" && exit 1 ;;
     *) err "Invalid choice" ;;

@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 # List of required dependencies
-dependencies=("maim" "yad" "sxiv" "xwallpaper" "openvpn" "mpv" "ripgrep")
+dependencies=("maim" "yad" "sxiv" "xwallpaper" "openvpn" "mpv" "rg")
 
 # Check if required dependencies are installed
 for dep in "${dependencies[@]}"; do

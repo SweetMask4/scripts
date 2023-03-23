@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Check if the configuration file exists, and if it does, source it
 if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/config/_launch-helper.sh"
+  . "$HOME/scripts/_launch-helper.sh"
 else
   echo "configuration file not found"
   exit 1
@@ -56,11 +56,11 @@ main() {
         MANAGERS+=("${manager,,}")
     done < <(desktop)
 
-    choice=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Shutdown menu:' "${@}")
+    choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} 'Shutdown menu:' "${@}")
     # What to do when/if we choose one of the options.
     case $choice in
         'Logout')
-                if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+                if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 for manager in "${MANAGERS[@]}"; do 
                 killall "${manager}" || output "Process ${manager} was not running."
@@ -74,7 +74,7 @@ main() {
           ${logout_locker}
             ;;
         'Reboot')
-            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 systemctl reboot
             else
@@ -82,7 +82,7 @@ main() {
             fi
             ;;
         'Shutdown')
-            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 systemctl poweroff
             else
@@ -90,7 +90,7 @@ main() {
             fi
             ;;
         'Suspend')
-            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}" )" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 systemctl suspend
             else

@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Check if the configuration file exists, and if it does, source it
 if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/config/_launch-helper.sh"
+  . "$HOME/scripts/_launch-helper.sh"
 else
   echo "configuration file not found"
   exit 1
@@ -29,7 +29,7 @@ VPN_FILES=("$VPN_DIR"/*.ovpn)
 # Function to connect to VPN
 connect_vpn() {
     # Obtener el archivo .ovpn seleccionado por el usuario
-    SELECTED_VPN=$(printf '%s\n' "${VPN_FILES[@]##*/}" | ${DMENU} 'Select .ovpn file')
+    SELECTED_VPN=$(printf '%s\n' "${VPN_FILES[@]##*/}" | ${LAUNCHER} 'Select .ovpn file')
  
     # Verify selected file exists
     [ -f "$VPN_DIR/$SELECTED_VPN" ] || { echo "File '$SELECTED_VPN' does not exist in directory '$VPN_DIR'"; exit 1; }
@@ -66,7 +66,7 @@ disconnect_vpn() {
 # Función principal
 main() {
     declare -a options=("Connect to VPN" "Disconnect from VPN")
-    CHOICE=$(printf '%s\n' "${options[@]}" | ${DMENU} 'Option:' "${@}")
+    CHOICE=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} 'Option:' "${@}")
   
     case "$CHOICE" in
     "Connect to VPN") connect_vpn;;

@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Check if the configuration file exists, and if it does, source it
 if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/config/_launch-helper.sh"
+  . "$HOME/scripts/_launch-helper.sh"
 else
   echo "configuration file not found"
   exit 1
@@ -84,7 +84,7 @@ main() {
   done
   unset IFS
 
-  target=$(printf '%s\n' "${modes[@]}" | ${DMENU} 'Take screenshot of:' "$@") || exit 1
+  target=$(printf '%s\n' "${modes[@]}" | ${LAUNCHER} 'Take screenshot of:' "$@") || exit 1
   case "$target" in
     'Fullscreen')
       _file_type="full"
@@ -104,7 +104,7 @@ main() {
     ;;
   esac
 
-  delay=$(printf '%s\n' "$(seq 0 5)" | ${DMENU} 'Delay (in seconds):' "$@" ) || exit 1
+  delay=$(printf '%s\n' "$(seq 0 5)" | ${LAUNCHER} 'Delay (in seconds):' "$@" ) || exit 1
   if [ ! "${delay}" -eq "0" ]; then
     _maim_args="${_maim_args} --delay=${delay}"
   else
@@ -113,7 +113,7 @@ main() {
 
   _maim_args="${_maim_args} -q"
   local destination=( "File" "Clipboard" "Both" )
-  dest=$(printf '%s\n' "${destination[@]}" | ${DMENU} 'Destination:' "$@" ) || exit 1
+  dest=$(printf '%s\n' "${destination[@]}" | ${LAUNCHER} 'Destination:' "$@" ) || exit 1
   case "$dest" in
     'File')
       # shellcheck disable=SC2086,SC2154
