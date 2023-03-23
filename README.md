@@ -34,6 +34,7 @@ fi
 is configured in ~/scripts/config/config
 comment on the one you don't use and uncomment on the one you will use example
 ``` shell
-# DMENU="dmenu -i -l 20 -p"
-DMENU="rofi -dmenu -i -p"
+# LAUNCHER="rofi -dmenu -i -p"
+LAUNCHER="dmenu -i -l 20 -x 9 -y 9 -p"
+
 ```
