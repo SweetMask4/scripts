@@ -3,14 +3,7 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-# Check if the configuration file exists, and if it does, source it
-if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/_launch-helper.sh"
-else
-  echo "configuration file not found"
-  exit 1
-fi
-
+. "$HOME/scripts/_menu-helper.sh" || exit 1
 
 # <<------ Directories ------>> #
 book_library="$HOME/Documents/Books"
@@ -20,7 +13,7 @@ article_library="$HOME/Documents/Articles"
 # <<------ Main ------>> #
 create_document() {
   # Use dmenu to prompt the user to select the type of document to create
-  document_type=$(printf "Basic\nOrg\nLaTeX\nBeamer\nRmark" | ${LAUNCHER} "What kind of note?")
+  document_type=$(echo -e "Basic\nOrg\nLaTeX\nBeamer\nRmark" | ${LAUNCHER} "What kind of note?")
 
   # Check if the user cancelled the prompt
   if [ -z "$document_type" ]; then

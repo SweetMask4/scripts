@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 # Defined variables, modify anything in quotes to your preferred software
-LAUNCHER="dmenu -i -l 20 -x 9 -y 9 -p"
+LAUNCHER="rofi -dmenu -i -p"
+LAUNCHER="dmenu -i -p"
 LBROWSER="firefox"
 LTERM="st -e"
 LEDITOR="emacsclient -c -a emacs"

@@ -3,14 +3,7 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-# Check if the configuration file exists, and if it does, source it
-if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/_launch-helper.sh"
-else
-  echo "configuration file not found"
-  exit 1
-fi
-
+. "$HOME/scripts/_menu-helper.sh" || exit 1
 
 _out="echo"
 if [[ ${TERM} == 'dumb' ]]; then
