@@ -16,14 +16,14 @@ set -euo pipefail
 
 _reload_wallpaper() {
     xargs -a ~/.config/wall xwallpaper --stretch
-  }
+}
 
 # Enable second display as second monitor
-_second_as_monitor(){
+_second_as_monitor() {
     declare -a options=(" left" " right" " above" " below")
 
     SIDE=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} "󰍺 Second as monitor")
-    case $SIDE in 
+    case $SIDE in
         " left") xrandr --output "$DEFAULT" --auto --output "$SECOND" --left-of "$DEFAULT" ;;
         " right") xrandr --output "$DEFAULT" --auto --output "$SECOND" --right-of "$DEFAULT" ;;
         " above") xrandr --output "$DEFAULT" --auto --output "$SECOND" --above "$DEFAULT" ;;
@@ -33,19 +33,19 @@ _second_as_monitor(){
 }
 
 # Switch audio output
-switch_audio_output(){
+switch_audio_output() {
     DEVICES=$(pacmd list-cards | awk -F '[<>]' '/name:/ {print $2}')
-    PROFILES=$(pacmd list-cards | grep 'output:' | awk '{print substr($1, 1, length($1)-1)}'| grep -v 'activ')
- 
+    PROFILES=$(pacmd list-cards | grep 'output:' | awk '{print substr($1, 1, length($1)-1)}' | grep -v 'activ')
+
     if [[ "$(echo -e "No\nYes" | ${LAUNCHER} " change audio profile")" == "Yes" ]]; then
-    Selected_Profile=$(printf '%s\n' "${PROFILES[@]}" | ${LAUNCHER} ' Available profiles:')
+        Selected_Profile=$(printf '%s\n' "${PROFILES[@]}" | ${LAUNCHER} ' Available profiles:')
         # Change the default audio output device to the selected device
         pacmd set-card-profile "$DEVICES" "$Selected_Profile"
     fi
 }
 
 # Main function
-main(){
+main() {
     # Get the current connected monitors
     connected_monitors=$(xrandr | awk '/ connected/{printf "%s ",$1}')
     number_of_monitors=$(echo "$connected_monitors" | wc -w)
@@ -56,7 +56,7 @@ main(){
         SECOND=$(echo "$connected_monitors" | awk '{print $2}')
 
         choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} '󰍹 Display option: ')
-        case $choice in 
+        case $choice in
             '󰍺 Second as monitor') _second_as_monitor ;;
             '󱒃 Second as mirror')
                 xrandr --output "$DEFAULT" --auto --output "$SECOND" --same-as "$DEFAULT"
@@ -71,9 +71,9 @@ main(){
             *) exit 0 ;;
         esac
     else
-      echo "Error: Please connect two monitors."
-      exit 0
-  fi
+        echo "Error: Please connect two monitors."
+        exit 0
+    fi
 }
 
 [[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"

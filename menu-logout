@@ -12,42 +12,41 @@ if [[ ${TERM} == 'dumb' ]]; then
     _out="notify-send"
 fi
 
-output(){
+output() {
     ${_out} "power-menu" "$@"
 }
 
-warning(){
-  if [ -f /var/lib/pacman/db.lock ]; then
-    ${_out} "pacman is running wait for it to finish"
-  fi
+warning() {
+    if [ -f /var/lib/pacman/db.lock ]; then
+        ${_out} "pacman is running wait for it to finish"
+    fi
 
-  if pgrep -x "pacman" > /dev/null; then
-    ${_out} "System is updating. Cannot shut down, reboot or log out right now." 
-    exit 1
-  fi
+    if pgrep -x "pacman" >/dev/null; then
+        ${_out} "System is updating. Cannot shut down, reboot or log out right now."
+        exit 1
+    fi
 }
 
-desktop(){
-  case "$XDG_SESSION_TYPE" in
-    'x11') grep "Name=" /usr/share/xsessions/*.desktop | cut -d'=' -f2;;
-    'wayland') grep "Name=" /usr/share/wayland-sessions/*.desktop | cut -d'=' -f2 || grep "Name=" /usr/share/xsessions/*.desktop | grep -i "wayland" | cut -d'=' -f2 | cut -d' ' -f1;; 
-    *) err "Unknown display server";;
-  esac
+desktop() {
+    case "$XDG_SESSION_TYPE" in
+        'x11') grep "Name=" /usr/share/xsessions/*.desktop | cut -d'=' -f2 ;;
+        'wayland') grep "Name=" /usr/share/wayland-sessions/*.desktop | cut -d'=' -f2 || grep "Name=" /usr/share/xsessions/*.desktop | grep -i "wayland" | cut -d'=' -f2 | cut -d' ' -f1 ;;
+        *) err "Unknown display server" ;;
+    esac
 }
 
 main() {
     # An array of options to choose.
     declare -a options=(
-    " Lock screen"
-    " Logout"
-    " Reboot"
-    " Shutdown"
-    " Suspend"
-    "Quit"
-    ) 
+        " Lock screen"
+        " Logout"
+        " Reboot"
+        " Shutdown"
+        " Suspend"
+        "Quit"
+    )
     declare -a MANAGERS
-    while IFS= read -r manager
-    do
+    while IFS= read -r manager; do
         MANAGERS+=("${manager,,}")
     done < <(desktop)
 
@@ -55,21 +54,21 @@ main() {
     # What to do when/if we choose one of the options.
     case $choice in
         ' Logout')
-                if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
                 warning
-                for manager in "${MANAGERS[@]}"; do 
-                killall "${manager}" || output "Process ${manager} was not running."
+                for manager in "${MANAGERS[@]}"; do
+                    killall "${manager}" || output "Process ${manager} was not running."
                 done
             else
                 output "User chose not to logout." && exit 1
             fi
             ;;
         ' Lock screen')
-          warning
-          ${logout_locker}
+            warning
+            ${logout_locker}
             ;;
         ' Reboot')
-            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
                 warning
                 systemctl reboot
             else
@@ -77,7 +76,7 @@ main() {
             fi
             ;;
         ' Shutdown')
-            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
                 warning
                 systemctl poweroff
             else
@@ -85,7 +84,7 @@ main() {
             fi
             ;;
         ' Suspend')
-            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
                 warning
                 systemctl suspend
             else
@@ -94,12 +93,12 @@ main() {
             ;;
         'Quit')
             output "Program terminated." && exit 0
-        ;;
+            ;;
         # It is a common practice to use the wildcard asterisk symbol (*) as a final
         # pattern to define the default case. This pattern will always match.
         *)
             exit 0
-        ;;
+            ;;
     esac
 
 }

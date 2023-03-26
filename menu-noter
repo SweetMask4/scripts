@@ -98,24 +98,24 @@ main() {
   # Set the directory based on the user's selection
   # if selected_dir is not empty
   if [[ -n $selected_dir ]]; then
-      case $selected_dir in
-          "📑 Create Note")
-              directory=$note_library
-              create_document 
-              ;;
-          "🔖 View Notes")
-              directory=$note_library
-              edit_notes
-              ;;
-          "📚 Library")
-              directory=$book_library
-              open_document
-              ;;
-          "📜 Articles")
-              directory=$article_library
-              open_document
-              ;;
-      esac
+    case $selected_dir in
+      "📑 Create Note")
+        directory=$note_library
+        create_document
+        ;;
+      "🔖 View Notes")
+        directory=$note_library
+        edit_notes
+        ;;
+      "📚 Library")
+        directory=$book_library
+        open_document
+        ;;
+      "📜 Articles")
+        directory=$article_library
+        open_document
+        ;;
+    esac
   else
     exit 0
   fi
