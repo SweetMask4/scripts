@@ -3,37 +3,31 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-# Check if the configuration file exists, and if it does, source it
-if [ -f "$HOME/scripts/_launch-helper.sh" ]; then
-  . "$HOME/scripts/_launch-helper.sh"
-else
-  echo "configuration file not found"
-  exit 1
-fi
-
-
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/_menu-helper.sh || exit 1
 
 function main() {
   # An array of options to choose.
-  local _options=( "Search manpages" "Random manpage" "Quit")
+  local _options=( " Search manpages" " Random manpage" "󰗼 Quit")
   # Piping the above array into dmenu.
   # We use "printf '%s\n'" to format the array one item to a line.
-  choice=$(printf '%s\n' "${_options[@]}" | ${LAUNCHER} 'Manpages:' "$@")
+  choice=$(printf '%s\n' "${_options[@]}" | ${LAUNCHER} ' Manpages:' "$@")
 
   # What to do when/if we choose one of the options.
   case "$choice" in
-    'Search manpages')
+    ' Search manpages')
           # shellcheck disable=SC2086
           man -k . | awk '{$3="-"; print $0}' | \
           ${LAUNCHER} 'Search for:' | \
           awk '{print $2, $1}' | tr -d '()' | xargs $LTERM man
     ;;
-    'Random manpage')
+    ' Random manpage')
           # shellcheck disable=SC2086
           man -k . | cut -d' ' -f1 | shuf -n 1 | \
           ${LAUNCHER} 'Random manpage:' | xargs $LTERM man
     ;;
-    'Quit')
+    '󰗼 Quit')
       echo "Program terminated." && exit 0
     ;;
     *)

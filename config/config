@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 # Defined variables, modify anything in quotes to your preferred software
-LAUNCHER="rofi -dmenu -i -p"
+# LAUNCHER="rofi -dmenu -i -p"
 LAUNCHER="dmenu -i -p"
 LBROWSER="firefox"
 LTERM="st -e"
@@ -9,15 +9,15 @@ LEDITOR="emacsclient -c -a emacs"
 PDF_VIEWER="zathura"
 LOGOUT_LOCKER="slock"
 
-# dm-setbg
+# menu-setbg
 setbg_dir="${HOME}/Pictures/wallpapers"
 use_imv=0
 
-# dm-maim
+# menu-maim
 maim_dir="${HOME}/Pictures/Screenshots"
 maim_file_prefix="maim"
 
-# dm-confedit
+# menu-confedit
 declare -A confedit_list
 confedit_list[confedit]="$HOME/scripts/dmenu/config/config"
 confedit_list[alacritty]="$HOME/.config/alacritty/alacritty.org"
@@ -54,7 +54,7 @@ confedit_list[lf mappings]="$HOME/.config/lf/mappings"
 confedit_list[lf settings]="$HOME/.config/lf/settings"
 confedit_list[lf commands]="$HOME/.config/lf/commands"
 
-# dm-confedit
+# menu-confedit
 declare -A radio_stations
 radio_stations[50s Rewind]="https://zeno.fm/radio/50s-rewind/"
 radio_stations[60s Rewind]="https://zeno.fm/radio/60s-rewind/"

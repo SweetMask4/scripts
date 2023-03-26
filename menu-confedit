@@ -3,7 +3,9 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-. "$HOME/scripts/_menu-helper.sh" || exit 1
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/_menu-helper.sh || exit 1
 
 main() {
   # Clean options array making sure that the files exist
@@ -16,7 +18,7 @@ main() {
 
   # Piping the above array (cleaned) into dmenu.
   # We use "printf '%s\n'" to format the array one item to a line.
-  choice=$(printf '%s\n' "${!_clean_list[@]}" | sort | ${LAUNCHER} 'Edit config:' "$@")
+  choice=$(printf '%s\n' "${!_clean_list[@]}" | sort | ${LAUNCHER} ' Edit config:' "$@")
 
   # What to do when/if we choose a file to edit.
   if [ "$choice" ]; then

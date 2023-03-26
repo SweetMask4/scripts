@@ -3,10 +3,13 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-. "$HOME/scripts/_menu-helper.sh" || exit 1
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/_menu-helper.sh || exit 1
 
 menu() {
   printf '%s\n' "Quit"
+  # shellcheck disable=SC2154
   printf '%s\n' "${!radio_stations[@]}" | sort
 }
 
@@ -21,7 +24,7 @@ end_radio() {
 
 main() {
   # Choosing a radio station from array sourced in 'config'.
-  choice=$(menu | ${DMENU} 'Choose radio station:' "$@") || exit 1
+  choice=$(menu | ${LAUNCHER} ' Choose radio station:' "$@") || exit 1
 
   case $choice in
     Quit)

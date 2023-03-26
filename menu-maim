@@ -3,14 +3,18 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-. "$HOME/scripts/_menu-helper.sh" || exit 1
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/_menu-helper.sh || exit 1
 
+# Plays a camera shutter sound if the sound file exists
 sound(){
 if [ -f /usr/share/sounds/freedesktop/stereo/camera-shutter.oga ];then
 paplay /usr/share/sounds/freedesktop/stereo/camera-shutter.oga
 fi
 }
 
+# Copy text to clipboard function
 cp2cb() {
   case "$XDG_SESSION_TYPE" in
     'x11') xclip -r -selection clipboard;;
@@ -19,12 +23,12 @@ cp2cb() {
   esac
 }
 
+# Get current timestamp
 get_timestamp() {
   date '+%Y%m%d-%H%M%S'
 }
 
 # local version of cp2cb is needed to account for dm-maim's specific usage
-
 cp2cb-maim() {
   case "$XDG_SESSION_TYPE" in
     'x11') xclip -selection clipboard -t image/png;;
@@ -41,9 +45,9 @@ main() {
   mkdir -p "${maim_dir}"
 
   declare -a modes=(
-  "Fullscreen"
-  "Active window"
-  "Selected region"
+  " Fullscreen"
+  "󰹑 Active window"
+  "󰒅 Selected region"
   )
   # Get monitors and their settings for maim
   
@@ -77,17 +81,17 @@ main() {
   done
   unset IFS
 
-  target=$(printf '%s\n' "${modes[@]}" | ${LAUNCHER} 'Take screenshot of:' "$@") || exit 1
+  target=$(printf '%s\n' "${modes[@]}" | ${LAUNCHER} '󰹑 Take screenshot of:' "$@") || exit 1
   case "$target" in
-    'Fullscreen')
+    ' Fullscreen')
       _file_type="full"
     ;;
-    'Active window')
+    '󰹑 Active window')
       active_window=$(xdotool getactivewindow)
       _maim_args="-i ${active_window}"
       _file_type="window"
     ;;
-    'Selected region')
+    '󰒅 Selected region')
       _maim_args="-s"
       _file_type="region"
     ;;
@@ -97,7 +101,7 @@ main() {
     ;;
   esac
 
-  delay=$(printf '%s\n' "$(seq 0 5)" | ${LAUNCHER} 'Delay (in seconds):' "$@" ) || exit 1
+  delay=$(printf '%s\n' "$(seq 0 5)" | ${LAUNCHER} ' Delay (in seconds):' "$@" ) || exit 1
   if [ ! "${delay}" -eq "0" ]; then
     _maim_args="${_maim_args} --delay=${delay}"
   else
@@ -105,22 +109,22 @@ main() {
   fi
 
   _maim_args="${_maim_args} -q"
-  local destination=( "File" "Clipboard" "Both" )
-  dest=$(printf '%s\n' "${destination[@]}" | ${LAUNCHER} 'Destination:' "$@" ) || exit 1
+  local destination=( " File" "󱉦 Clipboard" " Both" )
+  dest=$(printf '%s\n' "${destination[@]}" | ${LAUNCHER} ' Destination:' "$@" ) || exit 1
   case "$dest" in
-    'File')
+    ' File')
       # shellcheck disable=SC2086,SC2154
       maim ${_maim_args} "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
       notify-send "Saved Screenshot" "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
       sound
     ;;
-    'Clipboard')
+    '󱉦 Clipboard')
       # shellcheck disable=SC2086
       maim ${_maim_args} | cp2cb-maim
       notify-send "Saved Screenshot" "Clipboard"
       sound
     ;;
-    'Both')
+    ' Both')
       # shellcheck disable=SC2086
       maim ${_maim_args} | tee "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png" | cp2cb-maim
       notify-send "Saved Screenshot" "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png And Clipboard"

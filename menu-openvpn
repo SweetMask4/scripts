@@ -3,7 +3,9 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-. "$HOME/scripts/_menu-helper.sh" || exit 1
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/_menu-helper.sh || exit 1
 
 # Get directory where .ovpn files are located
 VPN_DIR="$HOME/Documents/openvpn/"
@@ -23,7 +25,7 @@ VPN_FILES=("$VPN_DIR"/*.ovpn)
 # Function to connect to VPN
 connect_vpn() {
     # Obtener el archivo .ovpn seleccionado por el usuario
-    SELECTED_VPN=$(printf '%s\n' "${VPN_FILES[@]##*/}" | ${LAUNCHER} 'Select .ovpn file')
+    SELECTED_VPN=$(printf '%s\n' "${VPN_FILES[@]##*/}" | ${LAUNCHER} ' Select .ovpn file')
  
     # Verify selected file exists
     [ -f "$VPN_DIR/$SELECTED_VPN" ] || { echo "File '$SELECTED_VPN' does not exist in directory '$VPN_DIR'"; exit 1; }
@@ -59,12 +61,12 @@ disconnect_vpn() {
 
 # Función principal
 main() {
-    declare -a options=("Connect to VPN" "Disconnect from VPN")
-    CHOICE=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} 'Option:' "${@}")
+    declare -a options=(" Connect to VPN" " Disconnect from VPN")
+    CHOICE=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} ' Option:' "${@}")
   
     case "$CHOICE" in
-    "Connect to VPN") connect_vpn;;
-    "Disconnect from VPN") disconnect_vpn;;
+    " Connect to VPN") connect_vpn;;
+    " Disconnect from VPN") disconnect_vpn;;
     *) exit 0;;
     esac
 }

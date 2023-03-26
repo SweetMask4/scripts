@@ -20,6 +20,16 @@ this is a suite of scripts that work with both dmenu and rofi and have the follo
 
 - rofi
 - [dmenu](https://github.com/SweetMask4/dmenu)
+- mpv
+- nmcli
+- sxiv
+- maim
+- xwallpaper
+- openvpn
+- mpv
+- rg
+- xorg-xdpyinfo
+- ffmpeg
 
 # Screenshots
 

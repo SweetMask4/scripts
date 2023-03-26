@@ -3,7 +3,9 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-. "$HOME/scripts/_menu-helper.sh" || exit 1
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/_menu-helper.sh || exit 1
 
 _out="echo"
 if [[ ${TERM} == 'dumb' ]]; then
@@ -36,11 +38,11 @@ desktop(){
 main() {
     # An array of options to choose.
     declare -a options=(
-    "Lock screen"
-    "Logout"
-    "Reboot"
-    "Shutdown"
-    "Suspend"
+    " Lock screen"
+    " Logout"
+    " Reboot"
+    " Shutdown"
+    " Suspend"
     "Quit"
     ) 
     declare -a MANAGERS
@@ -49,10 +51,10 @@ main() {
         MANAGERS+=("${manager,,}")
     done < <(desktop)
 
-    choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} 'Shutdown menu:' "${@}")
+    choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} ' Shutdown menu:' "${@}")
     # What to do when/if we choose one of the options.
     case $choice in
-        'Logout')
+        ' Logout')
                 if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 for manager in "${MANAGERS[@]}"; do 
@@ -62,11 +64,11 @@ main() {
                 output "User chose not to logout." && exit 1
             fi
             ;;
-        'Lock screen')
+        ' Lock screen')
           warning
           ${logout_locker}
             ;;
-        'Reboot')
+        ' Reboot')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 systemctl reboot
@@ -74,7 +76,7 @@ main() {
                 output "User chose not to reboot." && exit 0
             fi
             ;;
-        'Shutdown')
+        ' Shutdown')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 systemctl poweroff
@@ -82,7 +84,7 @@ main() {
                 output "User chose not to shutdown." && exit 0
             fi
             ;;
-        'Suspend')
+        ' Suspend')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}" )" == "Yes" ]]; then
                 warning
                 systemctl suspend

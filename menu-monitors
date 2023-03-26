@@ -10,7 +10,9 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-. "$HOME/scripts/_menu-helper.sh" || exit 1
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/_menu-helper.sh || exit 1
 
 _reload_wallpaper() {
     xargs -a ~/.config/wall xwallpaper --stretch
@@ -18,14 +20,14 @@ _reload_wallpaper() {
 
 # Enable second display as second monitor
 _second_as_monitor(){
-    declare -a options=("left" "right" "above" "below")
+    declare -a options=(" left" " right" " above" " below")
 
-    SIDE=$(printf '%s\n' "${options[@]}" | "${LAUNCHER}" "Display option:")
+    SIDE=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} "󰍺 Second as monitor")
     case $SIDE in 
-        "left") xrandr --output "$DEFAULT" --auto --output "$SECOND" --left-of "$DEFAULT" ;;
-        "right") xrandr --output "$DEFAULT" --auto --output "$SECOND" --right-of "$DEFAULT" ;;
-        "above") xrandr --output "$DEFAULT" --auto --output "$SECOND" --above "$DEFAULT" ;;
-        "below") xrandr --output "$DEFAULT" --auto --output "$SECOND" --below "$DEFAULT" ;;
+        " left") xrandr --output "$DEFAULT" --auto --output "$SECOND" --left-of "$DEFAULT" ;;
+        " right") xrandr --output "$DEFAULT" --auto --output "$SECOND" --right-of "$DEFAULT" ;;
+        " above") xrandr --output "$DEFAULT" --auto --output "$SECOND" --above "$DEFAULT" ;;
+        " below") xrandr --output "$DEFAULT" --auto --output "$SECOND" --below "$DEFAULT" ;;
         *) exit 0 ;;
     esac
 }
@@ -35,8 +37,8 @@ switch_audio_output(){
     DEVICES=$(pacmd list-cards | awk -F '[<>]' '/name:/ {print $2}')
     PROFILES=$(pacmd list-cards | grep 'output:' | awk '{print substr($1, 1, length($1)-1)}'| grep -v 'activ')
  
-    if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "change audio profile")" == "Yes" ]]; then
-    Selected_Profile=$(printf '%s\n' "${PROFILES[@]}" | ${LAUNCHER} 'Available profiles:')
+    if [[ "$(echo -e "No\nYes" | ${LAUNCHER} " change audio profile")" == "Yes" ]]; then
+    Selected_Profile=$(printf '%s\n' "${PROFILES[@]}" | ${LAUNCHER} ' Available profiles:')
         # Change the default audio output device to the selected device
         pacmd set-card-profile "$DEVICES" "$Selected_Profile"
     fi
@@ -49,19 +51,19 @@ main(){
     number_of_monitors=$(echo "$connected_monitors" | wc -w)
 
     if [ "$number_of_monitors" -eq 2 ]; then
-        declare -a options=("Second as monitor" "Second as mirror" "Second disabled" "Default disabled")
+        declare -a options=("󰍺 Second as monitor" "󱒃 Second as mirror" "󰶐 Second disabled" "󰶐 Default disabled")
         DEFAULT=$(echo "$connected_monitors" | awk '{print $1}')
         SECOND=$(echo "$connected_monitors" | awk '{print $2}')
 
-        choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} 'Display option: ')
+        choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} '󰍹 Display option: ')
         case $choice in 
-            'Second as monitor') _second_as_monitor ;;
-            'Second as mirror')
+            '󰍺 Second as monitor') _second_as_monitor ;;
+            '󱒃 Second as mirror')
                 xrandr --output "$DEFAULT" --auto --output "$SECOND" --same-as "$DEFAULT"
                 _reload_wallpaper
                 ;;
-            'Second disabled') xrandr --output "$SECOND" --off --output "$DEFAULT" --auto ;;
-            'Default disabled')
+            '󰶐 Second disabled') xrandr --output "$SECOND" --off --output "$DEFAULT" --auto ;;
+            '󰶐 Default disabled')
                 switch_audio_output
                 xrandr --output "$DEFAULT" --off --output "$SECOND" --auto --pos 0x0 --rotate normal
                 _reload_wallpaper
@@ -70,6 +72,7 @@ main(){
         esac
     else
       echo "Error: Please connect two monitors."
+      exit 0
   fi
 }
 
