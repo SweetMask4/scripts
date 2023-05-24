@@ -2,13 +2,14 @@
 # shellcheck disable=SC2034
 # Defined variables, modify anything in quotes to your preferred software
 # LAUNCHER="rofi -dmenu -i -p"
+# LAUNCHER="fzf --border=rounded --margin=5% --color=dark --height 100% --reverse --header=$(basename "$0") --info=hidden --header-first --prompt"
 LAUNCHER="dmenu -i -p"
-LBROWSER="firefox"
-LTERM="st -e"
-LEDITOR="emacsclient -c -a emacs"
+WEB_BROWSER="firefox"
+TERMINAL_EMULATOR="st -e"
+#TEXT_EDITOR="emacsclient -c -a emacs"
+TEXT_EDITOR="${TERMINAL_EMULATOR} nvim"
 PDF_VIEWER="zathura"
 LOGOUT_LOCKER="slock"
-
 # menu-setbg
 setbg_dir="${HOME}/Pictures/wallpapers"
 use_imv=0

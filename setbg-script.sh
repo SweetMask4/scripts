@@ -4,7 +4,9 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-. "$HOME/scripts/_menu-helper.sh" || exit 1
+dependencies=("sxiv" "xwallpaper")
+
+. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 setbg() {
   if [[ -n "$1" ]]; then
@@ -50,4 +52,4 @@ main() {
   esac
 }
 
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+main "$@"

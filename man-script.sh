@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/_menu-helper.sh || exit 1
+. ~/scripts/helper-script.sh || exit 1
 
 function main() {
   # An array of options to choose.
@@ -36,5 +36,4 @@ function main() {
   esac
 
 }
-
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+main "$@"

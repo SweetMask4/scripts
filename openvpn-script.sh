@@ -3,9 +3,11 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
+dependencies=("openvpn" "yad")
+
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/_menu-helper.sh || exit 1
+. ~/scripts/_menu-helper.sh "${dependencies[@]}" || exit 1
 
 # Get directory where .ovpn files are located
 VPN_DIR="$HOME/Documents/openvpn/"
@@ -84,4 +86,4 @@ main() {
 }
 
 # Execute main function if script is executed directly
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+main "$@"

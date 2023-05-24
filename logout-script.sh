@@ -16,23 +16,20 @@ output() {
     ${_out} "power-menu" "$@"
 }
 
-warning() {
-    if [ -f /var/lib/pacman/db.lock ]; then
-        ${_out} "pacman is running wait for it to finish"
-    fi
-
-    if pgrep -x "pacman" >/dev/null; then
-        ${_out} "System is updating. Cannot shut down, reboot or log out right now."
-        exit 1
-    fi
-}
-
 desktop() {
     case "$XDG_SESSION_TYPE" in
         'x11') grep "Name=" /usr/share/xsessions/*.desktop | cut -d'=' -f2 ;;
         'wayland') grep "Name=" /usr/share/wayland-sessions/*.desktop | cut -d'=' -f2 || grep "Name=" /usr/share/xsessions/*.desktop | grep -i "wayland" | cut -d'=' -f2 | cut -d' ' -f1 ;;
         *) err "Unknown display server" ;;
     esac
+}
+
+options(){
+    if command -v systemd &>/dev/null;then
+        systemctl "$1"
+    else
+        pkexec "$1"
+    fi
 }
 
 main() {
@@ -64,29 +61,25 @@ main() {
             fi
             ;;
         ' Lock screen')
-            warning
             ${logout_locker}
             ;;
         ' Reboot')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                warning
-                systemctl reboot
+                options "reboot"
             else
                 output "User chose not to reboot." && exit 0
             fi
             ;;
         ' Shutdown')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                warning
-                systemctl poweroff
+                options "poweroff"
             else
                 output "User chose not to shutdown." && exit 0
             fi
             ;;
         ' Suspend')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                warning
-                systemctl suspend
+                options "suspend"
             else
                 output "User chose not to suspend." && exit 0
             fi
@@ -94,12 +87,12 @@ main() {
         'Quit')
             output "Program terminated." && exit 0
             ;;
-        # It is a common practice to use the wildcard asterisk symbol (*) as a final
-        # pattern to define the default case. This pattern will always match.
+            # It is a common practice to use the wildcard asterisk symbol (*) as a final
+            # pattern to define the default case. This pattern will always match.
         *)
             exit 0
             ;;
     esac
 
 }
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+main "$@"

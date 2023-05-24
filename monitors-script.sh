@@ -10,12 +10,14 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
+dependencies=("xorg" "xrandr" "pulseaudio" "xwallpaper")
+
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/_menu-helper.sh || exit 1
+. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 _reload_wallpaper() {
-    xargs -a ~/.config/wall xwallpaper --stretch
+    xargs xwallpaper --stretch <~/.config/wall
 }
 
 # Enable second display as second monitor
@@ -24,10 +26,10 @@ _second_as_monitor() {
 
     SIDE=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} "󰍺 Second as monitor")
     case $SIDE in
-        " left") xrandr --output "$DEFAULT" --auto --output "$SECOND" --left-of "$DEFAULT" ;;
-        " right") xrandr --output "$DEFAULT" --auto --output "$SECOND" --right-of "$DEFAULT" ;;
-        " above") xrandr --output "$DEFAULT" --auto --output "$SECOND" --above "$DEFAULT" ;;
-        " below") xrandr --output "$DEFAULT" --auto --output "$SECOND" --below "$DEFAULT" ;;
+        " left") xrandr --output "$SECOND" --auto --left-of "$DEFAULT" && _reload_wallpaper ;;
+        " right") xrandr --output "$SECOND" --auto --right-of "$DEFAULT" && _reload_wallpaper ;;
+        " above") xrandr --output "$SECOND" --auto --above "$DEFAULT" && _reload_wallpaper ;;
+        " below") xrandr --output "$SECOND" --auto --below "$DEFAULT" && _reload_wallpaper ;;
         *) exit 0 ;;
     esac
 }
@@ -58,16 +60,9 @@ main() {
         choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} '󰍹 Display option: ')
         case $choice in
             '󰍺 Second as monitor') _second_as_monitor ;;
-            '󱒃 Second as mirror')
-                xrandr --output "$DEFAULT" --auto --output "$SECOND" --same-as "$DEFAULT"
-                _reload_wallpaper
-                ;;
+            '󱒃 Second as mirror') xrandr --output "$SECOND" --auto --same-as "$DEFAULT" && _reload_wallpaper ;;
             '󰶐 Second disabled') xrandr --output "$SECOND" --off --output "$DEFAULT" --auto ;;
-            '󰶐 Default disabled')
-                switch_audio_output
-                xrandr --output "$DEFAULT" --off --output "$SECOND" --auto --pos 0x0 --rotate normal
-                _reload_wallpaper
-                ;;
+            '󰶐 Default disabled') switch_audio_output && xrandr --output "$DEFAULT" --off --output "$SECOND" --auto && _reload_wallpaper ;;
             *) exit 0 ;;
         esac
     else
@@ -75,5 +70,4 @@ main() {
         exit 0
     fi
 }
-
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+main "$@"
