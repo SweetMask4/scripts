@@ -2,7 +2,9 @@
 
 ## introduction
 
-this is a suite of scripts that work with both dmenu and rofi and have the following features:
+This set of scripts is designed to enhance your workflow by using tools such as dmenu, rofi, and fzf. Each script included in this suite has been created with the goal of simplifying common tasks, saving you valuable time in your day-to-day routine. Additionally, these scripts are optimized for efficient and hassle-free performance, allowing you to focus on what really matters: your work.
+
+Try this set of scripts today and discover how they can help you improve your productivity in a minimalist and effective manner.
 
 - `wifi-script.sh` (requiere: `nmcli`, `yad`)
 - `maim-script.sh` (requiere: `maim`, `xdotool`)
