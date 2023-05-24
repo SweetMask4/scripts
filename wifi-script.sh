@@ -3,7 +3,7 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-dependencies=("networkmanager" "yad")
+dependencies=("networkmanager" "yad" "nmcli")
 
 # Source the helper script
 # shellcheck disable=SC1090

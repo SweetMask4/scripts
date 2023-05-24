@@ -6,7 +6,7 @@ This set of scripts is designed to enhance your workflow by using tools such as 
 
 Try this set of scripts today and discover how they can help you improve your productivity in a minimalist and effective manner.
 
-- `wifi-script.sh` (requiere: `nmcli`, `yad`)
+- `wifi-script.sh` (requiere: `networkmanager`, `nmcli`, `yad`)
 - `maim-script.sh` (requiere: `maim`, `xdotool`)
 - `openvpn-script.sh` (requiere: `openvpn`, `yad`)
 - `note-manager.sh` (requiere: `ripgrep`)
