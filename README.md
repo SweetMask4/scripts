@@ -4,32 +4,18 @@
 
 this is a suite of scripts that work with both dmenu and rofi and have the following features:
 
-- menu-wifi this script facilitates wifi management
-- menu-maim launch maim this script facilitates screen capturing using maim
-- menu-openvpn this script makes it easy to connect to vpn
-- menu-note it facilitates the creation of both basic markdown and advanced markdown notes with latex and the opening of saved books and articles.
-- menu-logout facilitates restarting, shutting down and shutting down the WM or DE
-- menu-monitors facilitates monitor management by setting up external monitors and allows changing the audio profile.
-- menu-setbg makes it easy to change the wallpaper using sxiv giving a similar look to nitrogen.
-- menu-confedit facilitates the opening of configuration files
-- menu-kill facilitates the closing of malfunctioning programmes
-- menu-man makes it easy to look up a command in man
-- menu-radio makes it easier for you to listen to the radio
-
-# Requirements
-
-- rofi
-- [dmenu](https://github.com/SweetMask4/dmenu)
-- mpv
-- nmcli
-- sxiv
-- maim
-- xwallpaper
-- openvpn
-- mpv
-- rg
-- xorg-xdpyinfo
-- ffmpeg
+- `wifi-script.sh` (requiere: `nmcli`, `yad`)
+- `maim-script.sh` (requiere: `maim`, `xdotool`)
+- `openvpn-script.sh` (requiere: `openvpn`, `yad`)
+- `note-manager.sh` (requiere: `ripgrep`)
+- `logout-script.sh` (requiere `slock`)
+- `monitors-script.sh` (requiere: `xorg`, `xrandr`, `xwallpaper`, `pulseaudio`)
+- `maim-script.sh` (requiere: `xwallpaper`)
+- `record-script.sh` (requiere: `ffmpeg`, `xrandr`)
+- `confedit-script.sh`
+- `kill-script.sh`
+- `helper-script.sh`
+- `radio-script.sh` (requiere: `mpv`)
 
 # Screenshots
 
@@ -48,6 +34,13 @@ add this to your .zshrc or .bashrc file so the script can be called from anywher
 if [ -d "$HOME/scripts" ] ;
   then PATH="$HOME/scripts:$PATH"
 fi
+```
+is configured in ~/scripts/config/config
+here you can configure the editor of your choice
+
+```shell
+#TEXT_EDITOR="emacsclient -c -a emacs"
+TEXT_EDITOR="${TERMINAL_EMULATOR} nvim"
 ```
 
 is configured in ~/scripts/config/config
