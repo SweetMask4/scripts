@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-. ~/scripts/_menu-helper.sh || exit 1 
+dependencies=("qutebrowser")
+
+# Source the helper script
+# shellcheck disable=SC1090
+. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 _cache_dir="${HOME}/.cache/menu-bookman"
 _cache_file="${_cache_dir}/cache"
@@ -54,7 +58,7 @@ generateHistory() {
 
     if [[ -d "${HOME}/.mozilla/firefox" ]]; then
         SQL="PRAGMA encoding='UTF-8'; select 'Firefox', p.title,p.url from moz_historyvisits as h, moz_places as p where p.id == h.place_id order by url"
-        cd "${HOME}/.mozilla/firefox"
+        cd "${HOME}/.mozilla/firefox" || exit 1
         for db in */places.sqlite; do
             DB=$(realpath "${db}")
             cacheHistory "${DB}" "${SQL}" "firefox"

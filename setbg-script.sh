@@ -6,6 +6,9 @@ set -euo pipefail
 
 dependencies=("sxiv" "xwallpaper")
 
+
+# Source the helper script
+# shellcheck disable=SC1090
 . ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 setbg() {

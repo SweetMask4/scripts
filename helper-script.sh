@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 # List of required dependencies
-dependencies=("$@")
+dependencies=("dmenu" "$@")
 
 # Check if required dependencies are installed
 for dep in "${dependencies[@]}"; do

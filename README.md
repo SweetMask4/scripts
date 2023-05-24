@@ -14,6 +14,7 @@ Try this set of scripts today and discover how they can help you improve your pr
 - `monitors-script.sh` (requiere: `xorg`, `xrandr`, `xwallpaper`, `pulseaudio`)
 - `maim-script.sh` (requiere: `xwallpaper`)
 - `record-script.sh` (requiere: `ffmpeg`, `xrandr`)
+- `bookman-script.sh` (requiere: `qutebrowser`)
 - `confedit-script.sh`
 - `kill-script.sh`
 - `helper-script.sh`
