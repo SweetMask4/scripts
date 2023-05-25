@@ -7,7 +7,7 @@ set -euo pipefail
 
 # script will not hit this if there is no config-file to load
 # shellcheck disable=SC1090
-. ~/scripts/config/config || exit 1
+. ~/scripts/helper-script.sh || exit 1
 
 main() {
     # Running ps to get running processes and display in dmenu.

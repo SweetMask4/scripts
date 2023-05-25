@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/config/config|| exit 1
+. ~/scripts/helper-script.sh || exit 1
 
 main() {
     # Clean options array making sure that the files exist

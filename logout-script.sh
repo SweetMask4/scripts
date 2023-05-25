@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/_menu-helper.sh || exit 1
+. ~/scripts/helper-script.sh || exit 1
 
 _out="echo"
 if [[ ${TERM} == 'dumb' ]]; then
@@ -79,7 +79,11 @@ main() {
             ;;
         ' Suspend')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                options "suspend"
+                if command -v systemd;then
+                    options "suspend"
+                else
+                    options "zzz"
+                fi
             else
                 output "User chose not to suspend." && exit 0
             fi

@@ -7,7 +7,7 @@ dependencies=("ffmpeg")
 
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/_menu-helper.sh "${dependencies[@]}" || exit 1
+. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 # Set the video directory path and create it if it doesn't exist
 VIDEO="$HOME/Videos/recording"

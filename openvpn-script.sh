@@ -7,7 +7,7 @@ dependencies=("openvpn" "yad")
 
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/_menu-helper.sh "${dependencies[@]}" || exit 1
+. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 # Get directory where .ovpn files are located
 VPN_DIR="$HOME/Documents/openvpn/"
