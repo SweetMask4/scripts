@@ -6,19 +6,19 @@ This set of scripts is designed to enhance your workflow by using tools such as 
 
 Try this set of scripts today and discover how they can help you improve your productivity in a minimalist and effective manner.
 
-- `wifi-script.sh` (requiere: `networkmanager`, `nmcli`, `yad`)
-- `maim-script.sh` (requiere: `maim`, `xdotool`)
+- `wifi-script.sh` (require: `yad`, `networkmanager` or `connman` )
+- `maim-script.sh` (requiere: `maim`, `xdotool`, `xorg` or `wayland` )
 - `openvpn-script.sh` (requiere: `openvpn`, `yad`)
 - `note-manager.sh` (requiere: `ripgrep`)
 - `logout-script.sh` (requiere `slock`)
 - `monitors-script.sh` (requiere: `xorg`, `xrandr`, `xwallpaper`, `pulseaudio`)
 - `maim-script.sh` (requiere: `maim`,`xdotool`)
-- `record-script.sh` (requiere: `ffmpeg`, `xrandr`)
-- `bookman-script.sh` (requiere: `qutebrowser`)
+- `record-script.sh` (require: `ffmpeg`, `xrandr`)
+- `bookman-script.sh` (require: `qutebrowser`)
 - `confedit-script.sh`
 - `kill-script.sh`
 - `helper-script.sh`
-- `radio-script.sh` (requiere: `mpv`)
+- `radio-script.sh` (require: `mpv`)
 
 # Screenshots
 
