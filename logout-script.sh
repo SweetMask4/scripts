@@ -3,9 +3,11 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
+dependencies=("slock")
+
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/helper-script.sh || exit 1
+. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 _out="echo"
 if [[ ${TERM} == 'dumb' ]]; then
@@ -16,15 +18,8 @@ output() {
     ${_out} "power-menu" "$@"
 }
 
-desktop() {
-    case "$XDG_SESSION_TYPE" in
-        'x11') grep "Name=" /usr/share/xsessions/*.desktop | cut -d'=' -f2 ;;
-        'wayland') grep "Name=" /usr/share/wayland-sessions/*.desktop | cut -d'=' -f2 || grep "Name=" /usr/share/xsessions/*.desktop | grep -i "wayland" | cut -d'=' -f2 | cut -d' ' -f1 ;;
-        *) err "Unknown display server" ;;
-    esac
-}
 
-options(){
+initrun(){
     if command -v systemd &>/dev/null;then
         systemctl "$1"
     else
@@ -52,7 +47,6 @@ main() {
     case $choice in
         ' Logout')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                warning
                 for manager in "${MANAGERS[@]}"; do
                     killall "${manager}" || output "Process ${manager} was not running."
                 done
@@ -61,18 +55,18 @@ main() {
             fi
             ;;
         ' Lock screen')
-            ${logout_locker}
+            ${LOGOUT_LOCKER}
             ;;
         ' Reboot')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                options "reboot"
+                initrun "reboot"
             else
                 output "User chose not to reboot." && exit 0
             fi
             ;;
         ' Shutdown')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                options "poweroff"
+                initrun "poweroff"
             else
                 output "User chose not to shutdown." && exit 0
             fi
@@ -80,9 +74,9 @@ main() {
         ' Suspend')
             if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
                 if command -v systemd;then
-                    options "suspend"
+                    initrun "suspend"
                 else
-                    options "zzz"
+                    initrun "zzz"
                 fi
             else
                 output "User chose not to suspend." && exit 0

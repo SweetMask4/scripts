@@ -51,8 +51,7 @@ create_document() {
             message="R Markdown Document Created!"
             ;;
         *)
-            echo "Invalid option"
-            return 1
+            err "Invalid option"
             ;;
     esac
 
@@ -122,4 +121,4 @@ main() {
         exit 0
     fi
 }
-main "$@"
+main

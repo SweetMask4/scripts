@@ -134,4 +134,4 @@ main() {
         *) ([ -f /tmp/recordingpid ] && asktoend && exit) || maim ;;
     esac
 }
-main "$@"
+main

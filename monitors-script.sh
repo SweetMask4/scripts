@@ -10,7 +10,7 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-dependencies=("xorg" "xrandr" "pulseaudio" "xwallpaper")
+dependencies=("xrandr" "pulseaudio" "xwallpaper")
 
 # Source the helper script
 # shellcheck disable=SC1090
@@ -66,8 +66,7 @@ main() {
             *) exit 0 ;;
         esac
     else
-        echo "Error: Please connect two monitors."
-        exit 0
+        success "Error: Please connect two monitors."
     fi
 }
 main "$@"

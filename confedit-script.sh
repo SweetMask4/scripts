@@ -18,7 +18,7 @@ main() {
 
     # Piping the above array (cleaned) into dmenu.
     # We use "printf '%s\n'" to format the array one item to a line.
-    choice=$(printf '%s\n' "${!_clean_list[@]}" | sort | ${LAUNCHER} ' Edit config:' "$@")
+    choice=$(printf '%s\n' "${!_clean_list[@]}" | sort | ${LAUNCHER} ' Edit config:')
 
     # What to do when/if we choose a file to edit.
     if [ "$choice" ]; then
@@ -27,8 +27,8 @@ main() {
         $TEXT_EDITOR "$cfg"
         # What to do if we just escape without choosing anything.
     else
-        echo "Program terminated." && exit 0
+        success "Program terminated."
     fi
 }
 
-main "$@"
+main

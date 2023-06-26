@@ -3,7 +3,7 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-dependencies=("maim" "xdotool")
+dependencies=("maim" "xdotool" "xrandr")
 
 # Source the helper script
 # shellcheck disable=SC1090
@@ -11,18 +11,10 @@ dependencies=("maim" "xdotool")
 
 # Plays a camera shutter sound if the sound file exists
 sound() {
-    if [ -f /usr/share/sounds/freedesktop/stereo/camera-shutter.oga ]; then
-        paplay /usr/share/sounds/freedesktop/stereo/camera-shutter.oga
+    sound_file="/usr/share/sounds/freedesktop/stereo/camera-shutter.oga"
+    if [ -f "$sound_file" ]; then
+        paplay "$sound_file"
     fi
-}
-
-# Copy text to clipboard function
-cp2cb() {
-    case "$XDG_SESSION_TYPE" in
-        'x11') xclip -r -selection clipboard ;;
-        'wayland') wl-copy -n ;;
-        *) err "Unknown display server" ;;
-    esac
 }
 
 # Get current timestamp

@@ -105,7 +105,7 @@ main() {
         nohup "${DMBROWSER}" "${choice##* }" >/dev/null 2>&1 &
     else
         # What to do if we just escape without choosing anything.
-        echo "Program terminated." && exit 1
+        success "Program terminated."
     fi
 }
 
