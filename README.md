@@ -50,6 +50,6 @@ is configured in ~/scripts/config/config
 comment on the one you don't use and uncomment on the one you will use example
 
 ```shell
-# DMENU="dmenu -i -p"
-DMENU="rofi -dmenu -i -p"
+# LAUNCHER="dmenu -i -p"
+LAUNCHER="rofi -dmenu -i -p"
 ```
