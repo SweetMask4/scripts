@@ -38,9 +38,11 @@ fullresolution="$total_width"x"$total_height"
 framerate="30"
 
 # Get current timestamp
-get_timestamp() {
+get_timestamp(){
     date '+%Y%m%d-%H%M%S'
 }
+
+output_file="$VIDEO/screencast-$(get_timestamp)"
 
 killrecording() {
     if [ -f /tmp/recordingpid ]; then
@@ -58,45 +60,49 @@ killrecording() {
 }
 
 screencast() {
+    local extension=".mp4"
     ffmpeg -nostdin -threads 0 -y \
         -f x11grab \
-        -r "$framerate" \
+        -framerate "$framerate" \
         -video_size "$fullresolution" \
         -i "$DISPLAY" \
         -f pulse -i default \
-        -c:v h264 -crf 25 -b:v 0 -preset ultrafast -c:a aac \
-        "$VIDEO/screencast-$(get_timestamp).mp4" &
+        -c:v libx264 -crf 23 -preset ultrafast -c:a aac \
+        "$output_file$extension" &
     echo $! >/tmp/recordingpid
     notify-send "Screencast recording has started"
 }
 
 video() {
+    local extension=".mp4"
     ffmpeg -nostdin -threads 0 -y \
         -f x11grab \
         -video_size "$fullresolution" \
         -i "$DISPLAY" \
         -r "$framerate" \
-        -c:v h264  -crf 25 -b:v 0 -preset ultrafast -c:a aac \
-        "$VIDEO/video-$(get_timestamp).mp4" &
+        -c:v libx264  -qp 23 -preset ultrafast\
+        "$output_file$extension" &
     echo $! >/tmp/recordingpid
     notify-send "Video recording has started"
 }
 
 webcam() {
+    local extension=".mkv"
     ffmpeg \
         -f v4l2 \
         -i /dev/video0 \
         -video_size 640x480 \
-        "$VIDEO/webcam-$(get_timestamp).mkv" &
+        "$output_file$extension" &
     echo $! >/tmp/recordingpid
     notify-send "Webcam recording has started"
 }
 
 audio() {
+    local extension=".flac"
     ffmpeg \
         -f alsa -i default \
         -f flac \
-        "$VIDEO/audio-$(get_timestamp).flac" &
+        "$output_file$extension" &
     echo $! >/tmp/recordingpid
     notify-send "Audio recording has started"
 }
@@ -107,7 +113,7 @@ asktoend() {
 }
 
 videoselected() {
-
+    local extension=".mkv"
     readarray -t coords < <(slop -f "%x %y %w %h")
     read -r X Y W H <<<"${coords[0]}"
 
@@ -116,8 +122,8 @@ videoselected() {
         -framerate 60 \
         -video_size "$W"x"$H" \
         -i :0.0+"$X,$Y" \
-        -c:v libx264 -qp 0 -r $framerate \
-        "$VIDEO/box-$(get_timestamp).mkv" &
+        -c:v libx264 -qp 23 -r $framerate \
+        "$output_file$extension" &
     echo $! >/tmp/recordingpid
     notify-send "videoselected recording has started"
 }

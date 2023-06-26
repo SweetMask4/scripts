@@ -21,7 +21,7 @@ start_radio() {
 }
 
 end_radio() {
-    notify-send "Stopping radio" "You have quit dm-radio. 🎶"
+    notify-send "Stopping radio" "You have quit radio-script. 🎶"
 }
 
 main() {
