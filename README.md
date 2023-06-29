@@ -1,4 +1,4 @@
-# scripts
+# my scripts
 
 ## introduction
 
