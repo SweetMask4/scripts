@@ -21,7 +21,7 @@ Try this set of scripts today and discover how they can help you improve your pr
 - `radio-script.sh` (require: `mpv`)
 
 # Screenshots
-
+1
 ![menu-logout](https://github.com/SweetMask4/scripts/blob/main/screenshots/launch-logout-dmenu.png?raw=true)
 ![menu-note](https://github.com/SweetMask4/scripts/blob/main/screenshots/launch-note-rofi.png?raw=true)
 
