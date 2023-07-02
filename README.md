@@ -22,8 +22,9 @@ Try this set of scripts today and discover how they can help you improve your pr
 
 # Screenshots
 
-![menu-logout](https://github.com/SweetMask4/scripts/blob/main/screenshots/launch-logout-dmenu.png?raw=true)
-![menu-note](https://github.com/SweetMask4/scripts/blob/main/screenshots/launch-note-rofi.png?raw=true)
+![dmenu](https://github.com/SweetMask4/scripts/blob/main/screenshots/dmenu.png?raw=true)
+![rofi](https://github.com/SweetMask4/scripts/blob/main/screenshots/rofi.png?raw=true)
+![fzf](https://github.com/SweetMask4/scripts/blob/main/screenshots/fzf.png?raw=true)
 
 # installation
 
