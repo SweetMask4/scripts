@@ -4,7 +4,7 @@
 # LAUNCHER="rofi -dmenu -i -p"
 # LAUNCHER="fzf --border=rounded --margin=5% --color=dark --height 100% --reverse --header=$(basename "$0") --info=hidden --header-first --prompt"
 LAUNCHER="dmenu -i -p"
-WEB_BROWSER="firefox"
+WEB_BROWSER="qutebrowser"
 TERMINAL_EMULATOR="st -e"
 TEXT_EDITOR="emacsclient -c -a emacs"
 # TEXT_EDITOR="${TERMINAL_EMULATOR} nvim"
