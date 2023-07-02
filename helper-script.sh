@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
