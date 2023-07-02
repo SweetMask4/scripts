@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
-# if certain things happen, which is a good thing.  Otherwise, we can
-# get hidden bugs that are hard to discover.
+# Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
 # script will not hit this if there is no config-file to load
