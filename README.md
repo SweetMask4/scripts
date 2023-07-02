@@ -20,6 +20,9 @@ Try this set of scripts today and discover how they can help you improve your pr
 - `helper-script.sh`
 - `radio-script.sh` (require: `mpv`)
 
+## other requirements
+- Nerd fonts
+
 # Screenshots
 
 ![dmenu](https://github.com/SweetMask4/scripts/blob/main/screenshots/dmenu.png?raw=true)
