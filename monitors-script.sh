@@ -69,4 +69,4 @@ main() {
         success "Error: Please connect two monitors."
     fi
 }
-main "$@"
+main
