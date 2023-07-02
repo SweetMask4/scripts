@@ -94,7 +94,7 @@ main() {
     # We use "printf '%s\n'" to format the array one item to a line.
     # The URLs are listed quickmarks, bookmarks and lastly history
     local choice=
-    choice=$(printf '%s\n' "${list}" "${histlist}" | sed '/^[[:space:]]*$/d' | ${LAUNCHER} "${LBROWSER} open:" "$@")
+    choice=$(printf '%s\n' "${list}" "${histlist}" | sed '/^[[:space:]]*$/d' | ${LAUNCHER} "${WEB_BROWSER} open:")
 
     # What to do if the separator is chosen from the list.
     # We simply launch qutebrowser without any URL arguments.
@@ -102,11 +102,11 @@ main() {
         [[ "$choice" == "$_bookman_separator" ]] && exit 1
         # What to do when/if we choose a URL to view.
         # url=$(echo "${choice}" | awk '{print $NF}') || exit 1
-        nohup "${DMBROWSER}" "${choice##* }" >/dev/null 2>&1 &
+        nohup "${WEB_BROWSER}" "${choice##* }" >/dev/null 2>&1 &
     else
         # What to do if we just escape without choosing anything.
         success "Program terminated."
     fi
 }
 
-main "$@"
+main
