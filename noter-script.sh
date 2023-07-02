@@ -30,7 +30,7 @@ create_document() {
             EXTENSION="md"
             message="Basic Document Created!"
             ;;
-        org)
+        Org)
             template="Note.org"
             EXTENSION="org"
             message="Basic Document Created!"
@@ -78,20 +78,23 @@ create_document() {
 
 open_document() {
     # case insensitive search with ripgrep
-    document=$(rg --files --iglob "*.pdf" --iglob "*.epub" --iglob "*.mobi" "$directory")
-    selected_document=$(echo "$document" | ${LAUNCHER} "📖 Open:")
+    document=$(find "$directory" -type f \( -name '*.pdf' -o -name '*.epub' -o -name '*.mobi' \)) 
+    selected_document=$(echo "$document" | awk -F/ '{print $NF}' | ${LAUNCHER} "📖 Open:")
     if [[ -n $selected_document ]]; then
-        $PDF_VIEWER "$selected_document"
+        file_to_open=$(find "$directory" -type f -name "$selected_file")
+        $PDF_VIEWER "$file_to_open"
     fi
 }
 
 edit_notes() {
-    document=$(rg --files --iglob "*.md" --iglob "*.org" --iglob "*.wiki" --iglob "*.tex" "$directory")
-    selected_document=$(echo "$document" | ${LAUNCHER} "📖 Open:")
-    if [[ -n $selected_document ]]; then
-        $TEXT_EDITOR "$selected_document"
+    document=$(find "$directory" -type f \( -name '*.md' -o -name '*.wiki' -o -name '*.tex' -o -name '*.org' \))
+    selected_file=$(echo "$document" | awk -F/ '{print $NF}' | ${LAUNCHER} "📖 Open:")
+    if [[ -n $selected_file ]]; then
+        file_to_open=$(find "$directory" -type f -name "$selected_file")
+        $TEXT_EDITOR "$file_to_open"
     fi
 }
+
 
 main() {
     # Prompt the user to select "Library" or "Articles" using dmenu
