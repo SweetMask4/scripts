@@ -4,6 +4,7 @@
 # LAUNCHER="rofi -dmenu -i -p"
 # LAUNCHER="fzf --border=rounded --margin=5% --color=dark --height 100% --reverse --header=$(basename "$0") --info=hidden --header-first --prompt"
 LAUNCHER="dmenu -i -p"
+# LAUNCHER="wofi -dmenu -i -p"
 WEB_BROWSER="qutebrowser"
 TERMINAL_EMULATOR="st -e"
 TEXT_EDITOR="emacsclient -c -a emacs"
@@ -16,7 +17,7 @@ setbg_dir="${HOME}/Pictures/wallpapers"
 use_imv=0
 
 # maim
-maim_dir="${HOME}/Pictures/Screenshots"
+maim_dir="${HOME}/Pictures/screenshots"
 maim_file_prefix="maim"
 
 # config list

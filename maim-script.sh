@@ -3,11 +3,11 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-dependencies=("maim" "xdotool" "xrandr")
+# dependencies=("maim" "xdotool" "xrandr")
 
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
+. ~/scripts/helper-script.sh || exit 1
 
 # Plays a camera shutter sound if the sound file exists
 sound() {
@@ -131,4 +131,4 @@ main() {
 
 }
 
-main "$@"
+main 

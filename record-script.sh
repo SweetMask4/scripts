@@ -35,7 +35,7 @@ done
 fullresolution="$total_width"x"$total_height"
 
 # Set the recording framerate
-framerate="30"
+framerate="10"
 
 # Get current timestamp
 get_timestamp(){
@@ -67,8 +67,8 @@ screencast() {
         -video_size "$fullresolution" \
         -i "$DISPLAY" \
         -f pulse -i default \
-        -c:v libx264 -crf 23 -preset ultrafast -c:a aac \
-        "$output_file$extension" &
+        -c:v libx264 -crf 30 -c:a aac -preset veryfast -pix_fmt yuv420p \
+        "$output_file$extension" >/dev/null 2>&1 &
     echo $! >/tmp/recordingpid
     notify-send "Screencast recording has started"
 }
@@ -77,11 +77,11 @@ video() {
     local extension=".mp4"
     ffmpeg -nostdin -threads 0 -y \
         -f x11grab \
+        -framerate "$framerate" \
         -video_size "$fullresolution" \
         -i "$DISPLAY" \
-        -r "$framerate" \
-        -c:v libx264  -qp 23 -preset ultrafast\
-        "$output_file$extension" &
+        -c:v libx264 -preset veryfast -crf 30 -pix_fmt yuv420p \
+        "$output_file$extension" >/dev/null 2>&1 &
     echo $! >/tmp/recordingpid
     notify-send "Video recording has started"
 }
@@ -92,7 +92,7 @@ webcam() {
         -f v4l2 \
         -i /dev/video0 \
         -video_size 640x480 \
-        "$output_file$extension" &
+        "$output_file$extension" >/dev/null 2>&1 &
     echo $! >/tmp/recordingpid
     notify-send "Webcam recording has started"
 }
@@ -102,7 +102,7 @@ audio() {
     ffmpeg \
         -f alsa -i default \
         -f flac \
-        "$output_file$extension" &
+        "$output_file$extension" >/dev/null 2>&1 &
     echo $! >/tmp/recordingpid
     notify-send "Audio recording has started"
 }
@@ -123,7 +123,7 @@ videoselected() {
         -video_size "$W"x"$H" \
         -i :0.0+"$X,$Y" \
         -c:v libx264 -qp 23 -r $framerate \
-        "$output_file$extension" &
+        "$output_file$extension" >/dev/null 2>&1 &
     echo $! >/tmp/recordingpid
     notify-send "videoselected recording has started"
 }

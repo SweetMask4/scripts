@@ -3,11 +3,9 @@
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-dependencies=("slock")
-
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
+. ~/scripts/helper-script.sh || exit 1
 
 _out="echo"
 if [[ ${TERM} == 'dumb' ]]; then
