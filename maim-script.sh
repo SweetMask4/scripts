@@ -103,7 +103,7 @@ main() {
     fi
 
     _maim_args="${_maim_args} -q"
-    local destination=(" File" "󱉦 Clipboard" " Both")
+    local destination=(" File" "󱉦 Clipboard" " Both" " Extract qr")
     dest=$(printf '%s\n' "${destination[@]}" | ${LAUNCHER} ' Destination:' "$@") || exit 1
     case "$dest" in
         ' File')
@@ -124,11 +124,24 @@ main() {
             notify-send "Saved Screenshot" "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png And Clipboard"
             sound
             ;;
+        ' Extract qr')
+            maim_dir="$HOME/.cache/qr"
+            mkdir -p "$maim_dir"
+            screenshot_file="${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
+            # shellcheck disable=SC2086
+            qr_output="$(maim ${_maim_args} | tee "$screenshot_file" | zbarimg -q -)"
+
+            if [[ -n "$qr_output" ]]; then
+              echo "$qr_output" | xclip -selection clipboard
+              notify-send "QR Code Detected" "$qr_output"
+            else
+                notify-send "No QR Code Found" "No QR code was detected in the screenshot."
+            fi
+            sound                        ;;
         *)
             exit 1
             ;;
     esac
-
 }
 
-main 
+main "$@"
