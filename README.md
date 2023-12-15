@@ -8,13 +8,10 @@ Try this set of scripts today and discover how they can help you improve your pr
 
 - `wifi-script.sh` (require: `yad`, `networkmanager` or `connman` )
 - `maim-script.sh` (requiere: `maim`, `xdotool`, `xorg` or `wayland` )
-- `openvpn-script.sh` (requiere: `openvpn`, `yad`)
 - `note-manager.sh` (requiere: `ripgrep`)
 - `logout-script.sh` (requiere `slock`)
 - `monitors-script.sh` (requiere: `xorg`, `xrandr`, `xwallpaper`, `pulseaudio`)
 - `maim-script.sh` (requiere: `maim`,`xdotool`)
-- `record-script.sh` (require: `ffmpeg`, `xrandr`)
-- `bookman-script.sh` (require: `qutebrowser`)
 - `confedit-script.sh`
 - `kill-script.sh`
 - `helper-script.sh`

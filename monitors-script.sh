@@ -61,8 +61,8 @@ main() {
         case $choice in
             '󰍺 Second as monitor') _second_as_monitor ;;
             '󱒃 Second as mirror') xrandr --output "$SECOND" --auto --same-as "$DEFAULT" && _reload_wallpaper ;;
-            '󰶐 Second disabled') xrandr --output "$SECOND" --off --output "$DEFAULT" --auto ;;
-            '󰶐 Default disabled') switch_audio_output && xrandr --output "$DEFAULT" --off --output "$SECOND" --auto && _reload_wallpaper ;;
+            '󰶐 Second disabled') xrandr --output "$SECOND" --off --output "$DEFAULT" --auto && dunst & ;;
+            '󰶐 Default disabled') switch_audio_output && xrandr --output "$DEFAULT" --off --output "$SECOND" --auto && _reload_wallpaper && killall dunst | start ;;
             *) exit 0 ;;
         esac
     else

@@ -6,7 +6,7 @@
 LAUNCHER="dmenu -i -p"
 # LAUNCHER="wofi -dmenu -i -p"
 WEB_BROWSER="qutebrowser"
-TERMINAL_EMULATOR="st -e"
+TERMINAL_EMULATOR="alacritty -e"
 TEXT_EDITOR="emacsclient -c -a emacs"
 # TEXT_EDITOR="${TERMINAL_EMULATOR} nvim"
 PDF_VIEWER="zathura"
