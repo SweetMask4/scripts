@@ -26,7 +26,7 @@ end_radio() {
 
 main() {
     # Choosing a radio station from array sourced in 'config'.
-    choice=$(menu | ${LAUNCHER} ' Choose radio station:' "$@") || exit 1
+    choice=$(menu | ${DMENU} ' Choose radio station:' "$@") || exit 1
 
     case $choice in
         Quit)

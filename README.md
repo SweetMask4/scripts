@@ -15,16 +15,15 @@ Try this set of scripts today and discover how they can help you improve your pr
 - `confedit-script.sh`
 - `kill-script.sh`
 - `helper-script.sh`
+- `websearch-script.sh`
+- `bookman-script.sh`
 - `radio-script.sh` (require: `mpv`)
 
 ## other requirements
 - Nerd fonts
 
 # Screenshots
-
-![dmenu](https://github.com/SweetMask4/scripts/blob/main/screenshots/dmenu.png?raw=true)
-![rofi](https://github.com/SweetMask4/scripts/blob/main/screenshots/rofi.png?raw=true)
-![fzf](https://github.com/SweetMask4/scripts/blob/main/screenshots/fzf.png?raw=true)
+![dmenu](https://github.com/SweetMask4/dotfiles-v2/blob/screenshot/script.jpg?raw=true)
 
 # installation
 
@@ -40,17 +39,3 @@ if [ -d "$HOME/scripts" ] ;
 fi
 ```
 is configured in ~/scripts/config/config
-here you can configure the editor of your choice
-
-```shell
-#TEXT_EDITOR="emacsclient -c -a emacs"
-TEXT_EDITOR="${TERMINAL_EMULATOR} nvim"
-```
-
-is configured in ~/scripts/config/config
-comment on the one you don't use and uncomment on the one you will use example
-
-```shell
-# LAUNCHER="dmenu -i -p"
-LAUNCHER="rofi -dmenu -i -p"
-```

@@ -21,7 +21,7 @@ initrun(){
     if command -v systemd &>/dev/null;then
         systemctl "$1"
     else
-        pkexec "$1"
+        loginctl "$1"
     fi
 }
 
@@ -29,7 +29,7 @@ main() {
     # An array of options to choose.
     declare -a options=(
         " Lock screen"
-        " Logout"
+        "󰗽 Logout"
         " Reboot"
         " Shutdown"
         " Suspend"
@@ -40,11 +40,11 @@ main() {
         MANAGERS+=("${manager,,}")
     done < <(desktop)
 
-    choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} ' Shutdown menu:' "${@}")
+    choice=$(printf '%s\n' "${options[@]}" | ${DMENU} ' Shutdown menu:' "${@}")
     # What to do when/if we choose one of the options.
     case $choice in
-        ' Logout')
-            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
+        '󰗽 Logout')
+            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}")" == "Yes" ]]; then
                 for manager in "${MANAGERS[@]}"; do
                     killall "${manager}" || output "Process ${manager} was not running."
                 done
@@ -56,26 +56,22 @@ main() {
             ${LOGOUT_LOCKER}
             ;;
         ' Reboot')
-            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}")" == "Yes" ]]; then
                 initrun "reboot"
             else
                 output "User chose not to reboot." && exit 0
             fi
             ;;
         ' Shutdown')
-            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
+            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}")" == "Yes" ]]; then
                 initrun "poweroff"
             else
                 output "User chose not to shutdown." && exit 0
             fi
             ;;
         ' Suspend')
-            if [[ "$(echo -e "No\nYes" | ${LAUNCHER} "${choice}?" "${@}")" == "Yes" ]]; then
-                if command -v systemd;then
-                    initrun "suspend"
-                else
-                    initrun "zzz"
-                fi
+            if [[ "$(echo -e "No\nYes" | ${DMENU} "${choice}?" "${@}")" == "Yes" ]]; then
+                initrun "suspend"
             else
                 output "User chose not to suspend." && exit 0
             fi

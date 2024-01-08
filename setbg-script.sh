@@ -24,7 +24,7 @@ setbg() {
 }
 
 main() {
-  case "$(printf "Set\nRandom\nExit" | ${LAUNCHER} "What would you like to do?")" in
+  case "$(printf "Set\nRandom\nExit" | ${DMENU} "What would you like to do?")" in
     Set)
       if ((use_imv)); then
         imv "${setbg_dir}" | while read -r LINE; do
@@ -47,7 +47,7 @@ main() {
         wallpaper="$(find "${setbg_dir}" -type f | shuf -n 1)"
         setbg "$wallpaper" &
         echo "$wallpaper" >"$HOME/.config/wall"
-        valid_paper="$(printf "Yes\nNo" | ${LAUNCHER} "Do you like the new wallpaper?")"
+        valid_paper="$(printf "Yes\nNo" | ${DMENU} "Do you like the new wallpaper?")"
       done
       ;;
     Exit) echo "Program terminated" && exit 1 ;;

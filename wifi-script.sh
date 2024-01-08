@@ -21,10 +21,10 @@ fi
 get_wifi_list() {
     state=$1
     if [[ "$backend" == "connman" ]]; then
-        bssid=$("$network_cmd" services | awk '{print $NF}'| ${LAUNCHER} "Select Wifi 󰤥 :")
+        bssid=$("$network_cmd" services | awk '{print $NF}'| ${DMENU} "Select Wifi 󰤥 :")
         network_cmd="connmanctl"
     elif [[ "$backend" == "networkmanager" ]]; then
-        bssid=$("$network_cmd" list | sed -n '1!p' | cut -b 9- | ${LAUNCHER} "Select Wifi 󰤥 :" | cut -d' ' -f1)
+        bssid=$("$network_cmd" list | sed -n '1!p' | cut -b 9- | ${DMENU} "Select Wifi 󰤥 :" | cut -d' ' -f1)
         network_cmd="nmcli device wifi"
     fi
 
@@ -33,7 +33,7 @@ get_wifi_list() {
         elif [[ "$backend" == "connman" && "$state" == "disconnect" ]];then
         network_cmd+=" disconnect"
     else
-        bssid=$(nmcli device wifi list | sed -n '1!p' | cut -b 9- | ${LAUNCHER} "Select Wifi 󰤥 :" | cut -d' ' -f3)
+        bssid=$(nmcli device wifi list | sed -n '1!p' | cut -b 9- | ${DMENU} "Select Wifi 󰤥 :" | cut -d' ' -f3)
         network_cmd="nmcli connection down"
     fi
 }
@@ -65,7 +65,7 @@ disconnect_wifi() {
 
 main() {
     options=("󰤥 Connect wifi" "󰤮 Disconnect wifi")
-    choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} '󰤥 Network option:')
+    choice=$(printf '%s\n' "${options[@]}" | ${DMENU} '󰤥 Network option:')
     case $choice in
         "󰤥 Connect wifi") connect_wifi ;;
         "󰤮 Disconnect wifi") disconnect_wifi ;;

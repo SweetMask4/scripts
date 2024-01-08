@@ -24,7 +24,7 @@ _reload_wallpaper() {
 _second_as_monitor() {
     declare -a options=(" left" " right" " above" " below")
 
-    SIDE=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} "󰍺 Second as monitor")
+    SIDE=$(printf '%s\n' "${options[@]}" | ${DMENU} "󰍺 Second as monitor")
     case $SIDE in
         " left") xrandr --output "$SECOND" --auto --left-of "$DEFAULT" && _reload_wallpaper ;;
         " right") xrandr --output "$SECOND" --auto --right-of "$DEFAULT" && _reload_wallpaper ;;
@@ -39,8 +39,8 @@ switch_audio_output() {
     DEVICES=$(pacmd list-cards | awk -F '[<>]' '/name:/ {print $2}')
     PROFILES=$(pacmd list-cards | grep 'output:' | awk '{print substr($1, 1, length($1)-1)}' | grep -v 'activ')
 
-    if [[ "$(echo -e "No\nYes" | ${LAUNCHER} " change audio profile")" == "Yes" ]]; then
-        Selected_Profile=$(printf '%s\n' "${PROFILES[@]}" | ${LAUNCHER} ' Available profiles:')
+    if [[ "$(echo -e "No\nYes" | ${DMENU} " change audio profile")" == "Yes" ]]; then
+        Selected_Profile=$(printf '%s\n' "${PROFILES[@]}" | ${DMENU} ' Available profiles:')
         # Change the default audio output device to the selected device
         pacmd set-card-profile "$DEVICES" "$Selected_Profile"
     fi
@@ -57,7 +57,7 @@ main() {
         DEFAULT=$(echo "$connected_monitors" | awk '{print $1}')
         SECOND=$(echo "$connected_monitors" | awk '{print $2}')
 
-        choice=$(printf '%s\n' "${options[@]}" | ${LAUNCHER} '󰍹 Display option: ')
+        choice=$(printf '%s\n' "${options[@]}" | ${DMENU} '󰍹 Display option: ')
         case $choice in
             '󰍺 Second as monitor') _second_as_monitor ;;
             '󱒃 Second as mirror') xrandr --output "$SECOND" --auto --same-as "$DEFAULT" && _reload_wallpaper ;;

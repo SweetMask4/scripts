@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Exit if any command fails, if any undefined variable is used, or if a pipeline fails
 set -euo pipefail
 
-# dependencies=("maim" "xdotool" "xrandr")
+dependencies=("maim" "xdotool" "xrandr")
 
 # Source the helper script
 # shellcheck disable=SC1090
-. ~/scripts/helper-script.sh || exit 1
+. ~/scripts/helper-script.sh "${dependencies[@]}" || exit 1
 
 # Plays a camera shutter sound if the sound file exists
 sound() {
@@ -75,7 +75,7 @@ main() {
     done
     unset IFS
 
-    target=$(printf '%s\n' "${modes[@]}" | ${LAUNCHER} '󰹑 Take screenshot of:' "$@") || exit 1
+    target=$(printf '%s\n' "${modes[@]}" | ${DMENU} '󰹑 Take screenshot of:' "$@") || exit 1
     case "$target" in
         ' Fullscreen')
             _file_type="full"
@@ -95,7 +95,7 @@ main() {
             ;;
     esac
 
-    delay=$(printf '%s\n' "$(seq 0 5)" | ${LAUNCHER} ' Delay (in seconds):' "$@") || exit 1
+    delay=$(printf '%s\n' "$(seq 0 5)" | ${DMENU} ' Delay (in seconds):' "$@") || exit 1
     if [ ! "${delay}" -eq "0" ]; then
         _maim_args="${_maim_args} --delay=${delay}"
     else
@@ -104,7 +104,7 @@ main() {
 
     _maim_args="${_maim_args} -q"
     local destination=(" File" "󱉦 Clipboard" " Both" " Extract qr")
-    dest=$(printf '%s\n' "${destination[@]}" | ${LAUNCHER} ' Destination:' "$@") || exit 1
+    dest=$(printf '%s\n' "${destination[@]}" | ${DMENU} ' Destination:' "$@") || exit 1
     case "$dest" in
         ' File')
             # shellcheck disable=SC2086,SC2154
@@ -125,19 +125,21 @@ main() {
             sound
             ;;
         ' Extract qr')
-            maim_dir="$HOME/.cache/qr"
-            mkdir -p "$maim_dir"
-            screenshot_file="${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
-            # shellcheck disable=SC2086
-            qr_output="$(maim ${_maim_args} | tee "$screenshot_file" | zbarimg -q -)"
+            temp=$(mktemp -p "$XDG_RUNTIME_DIR" --suffix=.png)
+            trap 'rm -f $temp' HUP INT QUIT TERM PWR Exit
+
+            maim -s "$temp" || exit 1
+            qr_output="$(zbarimg -q "$temp" )"
+            qr_output="${qr_output#QR-Code:}"
 
             if [[ -n "$qr_output" ]]; then
-              echo "$qr_output" | xclip -selection clipboard
-              notify-send "QR Code Detected" "$qr_output"
+                echo "$qr_output" | xclip -selection clipboard
+                notify-send "QR Code Detected" "$qr_output"
             else
                 notify-send "No QR Code Found" "No QR code was detected in the screenshot."
             fi
-            sound                        ;;
+            sound
+            ;;
         *)
             exit 1
             ;;

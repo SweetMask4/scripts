@@ -14,20 +14,20 @@ function main() {
   local _options=(" Search manpages" " Random manpage" "󰗼 Quit")
   # Piping the above array into dmenu.
   # We use "printf '%s\n'" to format the array one item to a line.
-  choice=$(printf '%s\n' "${_options[@]}" | ${LAUNCHER} ' Manpages:')
+  choice=$(printf '%s\n' "${_options[@]}" | ${DMENU} ' Manpages:')
 
   # What to do when/if we choose one of the options.
   case "$choice" in
     ' Search manpages')
       # shellcheck disable=SC2086
       man -k . | awk '{$3="-"; print $0}' |
-        ${LAUNCHER} 'Search for:' |
+        ${DMENU} 'Search for:' |
         awk '{print $2, $1}' | tr -d '()' | xargs $TERMINAL_EMULATOR man
       ;;
     ' Random manpage')
       # shellcheck disable=SC2086
       man -k . | cut -d' ' -f1 | shuf -n 1 |
-        ${LAUNCHER} 'Random manpage:' | xargs $TERMINAL_EMULATOR man
+        ${DMENU} 'Random manpage:' | xargs $TERMINAL_EMULATOR man
       ;;
     '󰗼 Quit')
       success "Program terminated."

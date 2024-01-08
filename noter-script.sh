@@ -8,7 +8,7 @@ set -euo pipefail
 . ~/scripts/helper-script.sh || exit 1
 
 # <<------ Directories ------>> #
-book_library="$HOME/Documents/Books"
+book_library="$HOME/Documents/books"
 note_library="$HOME/Documents/notes"
 article_library="$HOME/Documents/Articles"
 
@@ -78,7 +78,7 @@ open_document() {
     # case insensitive search with ripgrep
     document=$(find "$directory" -type f \( -name '*.pdf' -o -name '*.epub' -o -name '*.mobi' \)) 
     selected_document=$(echo "$document" | awk -F/ '{print $NF}' | ${LAUNCHER} "📖 Open:")
-    if [[ -n $selected_document ]]; then
+    if [ -n "$selected_document" ]; then
         file_to_open=$(find "$directory" -type f -name "$selected_file")
         $PDF_VIEWER "$file_to_open"
     fi
